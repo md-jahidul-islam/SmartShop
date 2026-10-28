@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Tanvir Hasan",
+    "role": "CSE Student & Tech Enthusiast",
+    "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+    "rating": 5,
+    "date": "October 18, 2026",
+    "title": "Super fast simulated delivery & great backpack!",
+    "comment": "Ordered the Fjallraven backpack using my demo balance and SMART10 discount code. The UI is exceptionally responsive and smooth. Love how seamless the checkout was!",
+    "verifiedPurchase": true,
+    "product": "Fjallraven - Foldsack No. 1 Backpack"
+  },
+  {
+    "id": 2,
+    "name": "Nusrat Jahan",
+    "role": "Software Engineering Major",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+    "rating": 5,
+    "date": "October 20, 2026",
+    "title": "Stunning jewelry collection and clear BDT pricing",
+    "comment": "The Petite Micropave ring simulation looks fantastic. Having prices clearly converted into simulated BDT makes it feel just like a real Bangladeshi e-commerce platform.",
+    "verifiedPurchase": true,
+    "product": "Solid Gold Petite Micropave"
+  },
+  {
+    "id": 3,
+    "name": "Rafiqul Islam",
+    "role": "Web Developer & Designer",
+    "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80",
+    "rating": 4,
+    "date": "October 22, 2026",
+    "title": "High quality SSD drive, tested live in cart",
+    "comment": "Tested the cart balance limit when adding the SanDisk 1TB SSD. The system prevented checkout when my balance was low, and after clicking Add Money it processed smoothly!",
+    "verifiedPurchase": true,
+    "product": "SanDisk SSD PLUS 1TB Internal SSD"
+  },
+  {
+    "id": 4,
+    "name": "Sadia Akhter",
+    "role": "Casual Shopper & Student",
+    "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
+    "rating": 5,
+    "date": "October 24, 2026",
+    "title": "Clean Tailwind CSS styling and intuitive navigation",
+    "comment": "The promotional carousel and product filters make finding winter jackets effortless. The coupon code SMART10 gave an exact 10% subtotal discount right before checkout.",
+    "verifiedPurchase": true,
+    "product": "Mens Cotton Jacket"
+  },
+  {
+    "id": 5,
+    "name": "Mahmudur Rahman",
+    "role": "CSE-3532 Peer Reviewer",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    "rating": 5,
+    "date": "October 25, 2026",
+    "title": "Impressive Vanilla JS DOM architecture!",
+    "comment": "No React or Bootstrap used, purely vanilla JavaScript and Tailwind utilities. The localStorage persistence works flawlessly even when reopening or refreshing the browser.",
+    "verifiedPurchase": true,
+    "product": "Acer SB220Q Ultra-Thin Monitor"
+  },
+  {
+    "id": 6,
+    "name": "Farhana Yeasmin",
+    "role": "Creative Media Specialist",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    "rating": 5,
+    "date": "October 26, 2026",
+    "title": "Outstanding responsive layout on mobile and desktop",
+    "comment": "The sticky navigation, sliding cart drawer, and interactive carousel controls work flawlessly across screen sizes. Excellent execution of a modern single-page store.",
+    "verifiedPurchase": true,
+    "product": "Lock and Love Women's Biker Jacket"
+  }
+]

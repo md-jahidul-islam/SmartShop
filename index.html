@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartShop | CSE-3532 Mid-Project</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- ==========================================
+       TOP NOTIFICATION BANNER (COURSE & SIMULATION NOTICE)
+       ========================================== -->
+  <div class="bg-indigo-900 text-indigo-100 text-xs py-2 px-4 border-b border-indigo-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-block bg-indigo-500/30 text-indigo-200 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border border-indigo-400/30">
+          CSE-3532 Mid-Project
+        </span>
+        <span class="font-medium text-xs">Simulated BDT (৳) Pricing & Demo Balance System • No Real Payment Processing</span>
+      </div>
+      <div class="flex items-center gap-4 text-[11px]">
+        <span class="hidden sm:inline text-indigo-300">Use Coupon <strong class="text-amber-300 font-bold tracking-wide">SMART10</strong> for 10% Discount</span>
+        <div class="flex items-center gap-1.5 bg-indigo-800/80 px-2.5 py-1 rounded-md border border-indigo-700">
+          <span class="text-indigo-300">Wallet:</span>
+          <span data-bind="demo-balance" class="font-bold text-amber-300">৳ 1,000.00</span>
+          <button type="button" data-action="add-money" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-1.5 py-0.5 rounded ml-1 transition-colors" title="Add 1000 BDT to Demo Balance">
+            +৳1k
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       RESPONSIVE STICKY NAVBAR
+       ========================================== -->
+  <header id="main-navbar" class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-3 group">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-2xl font-black tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">Smart<span class="text-indigo-600">Shop</span></span>
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest -mt-1">CSE-3532 Demo Store</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#home" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Home</a>
+          <a href="#products" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Products</a>
+          <a href="#reviews" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Reviews</a>
+          <a href="#about" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">About</a>
+          <a href="#contact" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Contact</a>
+        </nav>
+
+        <!-- Right Action Items: Demo Balance & Cart Drawer Trigger -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          
+          <!-- Balance Widget (Desktop) -->
+          <div class="hidden lg:flex items-center gap-2 bg-slate-100 border border-slate-200/80 rounded-xl px-3 py-1.5 shadow-inner">
+            <div class="text-left">
+              <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Demo Balance</span>
+              <span data-bind="demo-balance" class="text-xs font-black text-indigo-700">৳ 1,000.00</span>
+            </div>
+            <button 
+              type="button" 
+              data-action="add-money"
+              class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
+              title="Add 1000 BDT to Demo Balance"
+            >
+              + Add Money
+            </button>
+          </div>
+
+          <!-- Cart Drawer Button -->
+          <button 
+            type="button" 
+            data-action="toggle-cart"
+            class="relative p-2.5 bg-slate-100 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-xl text-slate-700 hover:text-indigo-600 transition-all active:scale-95"
+            aria-label="View Shopping Cart"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span 
+              data-bind="cart-count" 
+              class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 bg-indigo-600 text-white text-[11px] font-extrabold rounded-full flex items-center justify-center px-1 border-2 border-white shadow-sm"
+            >
+              0
+            </span>
+          </button>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button 
+            type="button" 
+            id="mobile-menu-btn"
+            class="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            aria-expanded="false"
+            aria-label="Toggle mobile menu"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl space-y-3">
+      <div class="flex flex-col space-y-2">
+        <a href="#home" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Home</a>
+        <a href="#products" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Products</a>
+        <a href="#reviews" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Reviews</a>
+        <a href="#about" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">About</a>
+        <a href="#contact" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Contact</a>
+      </div>
+
+      <!-- Mobile Balance & Add Money -->
+      <div class="pt-2 flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <div>
+          <span class="text-[10px] text-slate-500 font-semibold uppercase block">Demo Balance</span>
+          <span data-bind="demo-balance" class="text-sm font-black text-indigo-700">৳ 1,000.00</span>
+        </div>
+        <button 
+          type="button" 
+          data-action="add-money"
+          class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm"
+        >
+          + Add ৳1,000
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO: 4-SLIDE PROMOTIONAL IMAGE CAROUSEL
+       ========================================== -->
+  <section id="home" class="relative bg-slate-900 overflow-hidden">
+    <!-- Carousel Frame (Height adjusted for responsiveness) -->
+    <div id="promo-carousel" class="relative w-full h-[460px] sm:h-[520px] md:h-[580px] lg:h-[620px] overflow-hidden select-none">
+      
+      <!-- Slide Containers will be dynamically rendered here -->
+      <div id="promo-carousel-slides" class="relative w-full h-full"></div>
+
+      <!-- Manual Controls: Previous Button -->
+      <button 
+        type="button" 
+        id="promo-prev-btn"
+        class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all hover:scale-110 active:scale-95 focus:outline-none"
+        aria-label="Previous promotional slide"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Manual Controls: Next Button -->
+      <button 
+        type="button" 
+        id="promo-next-btn"
+        class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all hover:scale-110 active:scale-95 focus:outline-none"
+        aria-label="Next promotional slide"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- 4 Dot Indicators -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10" id="promo-carousel-indicators">
+        <!-- Rendered by js/carousel.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VALUE PROPOSITION / FEATURE PILLARS
+       ========================================== -->
+  <section class="py-10 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Pillar 1 -->
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-100 transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900">Simulated Fast Delivery</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Free standard delivery nationwide on simulated orders over ৳ 500.</p>
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-100 transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900">10% Off Voucher</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Use voucher code <strong class="text-indigo-600 font-bold">SMART10</strong> during checkout for 10% discount.</p>
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-100 transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900">Demo Wallet System</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">1,000 BDT default balance. Top up ৳1,000 anytime to test limits.</p>
+          </div>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-100 transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-slate-900">Verified REST API</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Real-time products fetched dynamically from FakeStore API.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       MAIN PRODUCTS SECTION
+       ========================================== -->
+  <section id="products" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+            Simulated BDT Pricing
+          </span>
+          <span class="text-xs text-slate-400">|</span>
+          <span class="text-xs text-slate-500">Live FakeStore Catalog</span>
+        </div>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Explore Our Products</h2>
+        <p class="text-sm text-slate-500 mt-1 max-w-2xl">
+          Browse real products dynamically loaded from FakeStore API. Add items to your cart, test balance constraints, and apply coupon codes.
+        </p>
+      </div>
+
+      <!-- Live Count -->
+      <div class="shrink-0">
+        <span id="products-count" class="text-xs font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">
+          Loading products...
+        </span>
+      </div>
+    </div>
+
+    <!-- Filter & Search Controls Bar -->
+    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm mb-8 space-y-4">
+      <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+        
+        <!-- Live Search Input -->
+        <div class="relative flex-1 max-w-md">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="product-search-input"
+            placeholder="Search by title, description or category..." 
+            class="w-full pl-10 pr-10 py-2.5 bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all"
+          />
+          <button 
+            type="button" 
+            id="search-clear-btn"
+            class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
+            title="Clear search"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sorting Dropdown -->
+        <div class="flex items-center gap-3">
+          <label for="product-sort-select" class="text-xs font-semibold text-slate-600 whitespace-nowrap hidden sm:inline">Sort By:</label>
+          <div class="relative min-w-[190px]">
+            <select 
+              id="product-sort-select"
+              class="w-full bg-slate-50 hover:bg-white border border-slate-200 rounded-xl py-2.5 pl-3 pr-8 text-xs sm:text-sm font-medium text-slate-700 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all appearance-none cursor-pointer"
+            >
+              <option value="default">Featured (Default)</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating-desc">Rating: Highest First</option>
+              <option value="name-asc">Title: A to Z</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Category Filter Pills (Scrollable horizontally on mobile) -->
+      <div class="pt-3 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1" id="category-filters">
+        <!-- Rendered by js/products.js -->
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Populated by js/products.js (initially displays skeleton loaders) -->
+    </div>
+
+    <!-- API Error State Container -->
+    <div id="products-error-container" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-red-200 shadow-sm max-w-xl mx-auto my-8">
+      <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800 mb-2">Unable to Load Products from API</h3>
+      <p id="products-error-message" class="text-xs sm:text-sm text-slate-500 mb-6 max-w-md mx-auto">
+        There was an issue connecting to https://fakestoreapi.com/products. You can retry the connection or switch to our offline backup catalog.
+      </p>
+      <div class="flex items-center justify-center gap-3">
+        <button 
+          type="button" 
+          id="products-retry-btn"
+          class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-all"
+        >
+          Retry Connection
+        </button>
+        <button 
+          type="button" 
+          id="products-fallback-btn"
+          class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-all"
+        >
+          Load Offline Catalog
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty Search / Filter State -->
+    <div id="products-empty-container" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-slate-200 shadow-sm max-w-md mx-auto my-8">
+      <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800 mb-1">No Matching Products Found</h3>
+      <p class="text-xs sm:text-sm text-slate-500 mb-5">
+        We couldn't find any products matching your current search or category filter.
+      </p>
+      <button 
+        type="button" 
+        id="reset-filters-btn"
+        class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all"
+      >
+        Reset All Filters
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ==========================================
+       REVIEWS SECTION (LOADS data/reviews.json)
+       ========================================== -->
+  <section id="reviews" class="py-20 bg-slate-100/80 border-t border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold mb-3">
+          <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+          Customer Feedback
+        </span>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">What Our Customers Say</h2>
+        <p class="text-sm text-slate-600 mt-2">
+          Read verified feedback from our users. Reviews are fetched asynchronously from <code class="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded font-mono text-xs">data/reviews.json</code>.
+        </p>
+
+        <!-- Trust Stats Bar -->
+        <div class="mt-6 flex items-center justify-center gap-6 sm:gap-10 border-t border-slate-200 pt-6">
+          <div class="text-center">
+            <span class="text-2xl font-black text-slate-900">4.9 / 5</span>
+            <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Average Rating</span>
+          </div>
+          <div class="w-px h-8 bg-slate-200"></div>
+          <div class="text-center">
+            <span class="text-2xl font-black text-slate-900">100%</span>
+            <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Verified Buyers</span>
+          </div>
+          <div class="w-px h-8 bg-slate-200"></div>
+          <div class="text-center">
+            <span class="text-2xl font-black text-slate-900">2,500+</span>
+            <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Demo Orders</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Carousel Wrapper -->
+      <div id="reviews-section" class="relative max-w-4xl mx-auto px-4 sm:px-12 select-none">
+        
+        <!-- Reviews Card Output -->
+        <div id="reviews-container" class="min-h-[260px] flex items-center justify-center">
+          <div class="text-center py-12 text-slate-400 text-sm">Loading reviews from data/reviews.json...</div>
+        </div>
+
+        <!-- Left Nav Button -->
+        <button 
+          type="button" 
+          id="reviews-prev-btn"
+          class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+          aria-label="Previous customer review"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <!-- Right Nav Button -->
+        <button 
+          type="button" 
+          id="reviews-next-btn"
+          class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+          aria-label="Next customer review"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Indicator Dots -->
+        <div class="flex items-center justify-center gap-2 mt-8" id="reviews-indicators">
+          <!-- Rendered by js/carousel.js -->
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       ABOUT & GROUP SHOWCASE SECTION
+       ========================================== -->
+  <section id="about" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left: Project Narrative -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider">
+            Academic Project Overview
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+            Built for CSE-3532: Web Technologies Mid-Term
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            SmartShop is an educational single-page e-commerce application created to demonstrate mastery of core modern web fundamentals.
+            Built purely with <strong>HTML5</strong>, <strong>Tailwind CSS utility classes</strong>, and <strong>Vanilla JavaScript DOM</strong>,
+            with absolutely zero reliance on React, Vue, Bootstrap, or custom CSS stylesheets.
+          </p>
+
+          <!-- Core Feature Bullets -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="text-indigo-600 font-bold text-sm">✓</span>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900">FakeStore REST API</h4>
+                <p class="text-[11px] text-slate-500 mt-0.5">Asynchronous product fetch with error handling and fallback.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="text-indigo-600 font-bold text-sm">✓</span>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900">Simulated BDT Economy</h4>
+                <p class="text-[11px] text-slate-500 mt-0.5">Demo balance of ৳1,000, ৳1k top-up, and checkout balance enforcement.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="text-indigo-600 font-bold text-sm">✓</span>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900">Dual Carousel Engines</h4>
+                <p class="text-[11px] text-slate-500 mt-0.5">4-slide promo hero + reviews.json carousel with auto/manual controls.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="text-indigo-600 font-bold text-sm">✓</span>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900">LocalStorage Engine</h4>
+                <p class="text-[11px] text-slate-500 mt-0.5">Cart items, demo balance, and applied voucher persist seamlessly.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coupon Hint Badge -->
+          <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 flex items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold text-indigo-900 block">Try Promo Code SMART10</span>
+              <span class="text-[11px] text-indigo-700">Receive 10% subtotal deduction instantly in your cart.</span>
+            </div>
+            <button 
+              type="button" 
+              onclick="Cart.applyCoupon('SMART10'); Cart.openCartDrawer();"
+              class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm whitespace-nowrap"
+            >
+              Apply SMART10
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Team Members Card -->
+        <div class="lg:col-span-6">
+          <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-800">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white">Project Development Team</h3>
+                <span class="text-xs text-indigo-400 font-medium">CSE-3532: Web Technologies Mid-Project</span>
+              </div>
+              <span class="px-2.5 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold rounded-full uppercase">
+                Team Evaluation
+              </span>
+            </div>
+
+            <!-- Members List Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
+                    <th class="pb-3 font-semibold">Student Name</th>
+                    <th class="pb-3 font-semibold">Student ID</th>
+                    <th class="pb-3 font-semibold">Project Role</th>
+                    <th class="pb-3 font-semibold text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/80">
+                  <!-- Group Member 1 -->
+                  <tr>
+                    <td class="py-3 font-medium text-white">
+                      [Member 1 Name]
+                      <span class="block text-[10px] text-slate-400">Lead Frontend Developer</span>
+                    </td>
+                    <td class="py-3 text-slate-300 font-mono">[2023-XX-001]</td>
+                    <td class="py-3 text-slate-300">HTML5 Structure & Tailwind</td>
+                    <td class="py-3 text-right">
+                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
+                    </td>
+                  </tr>
+                  <!-- Group Member 2 -->
+                  <tr>
+                    <td class="py-3 font-medium text-white">
+                      [Member 2 Name]
+                      <span class="block text-[10px] text-slate-400">Cart & State Architect</span>
+                    </td>
+                    <td class="py-3 text-slate-300 font-mono">[2023-XX-002]</td>
+                    <td class="py-3 text-slate-300">Cart, Balance & LocalStorage</td>
+                    <td class="py-3 text-right">
+                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
+                    </td>
+                  </tr>
+                  <!-- Group Member 3 -->
+                  <tr>
+                    <td class="py-3 font-medium text-white">
+                      [Member 3 Name]
+                      <span class="block text-[10px] text-slate-400">API & Carousels Engineer</span>
+                    </td>
+                    <td class="py-3 text-slate-300 font-mono">[2023-XX-003]</td>
+                    <td class="py-3 text-slate-300">FakeStore API & reviews.json</td>
+                    <td class="py-3 text-right">
+                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
+                    </td>
+                  </tr>
+                  <!-- Group Member 4 -->
+                  <tr>
+                    <td class="py-3 font-medium text-white">
+                      [Member 4 Name]
+                      <span class="block text-[10px] text-slate-400">QA & Validation Lead</span>
+                    </td>
+                    <td class="py-3 text-slate-300 font-mono">[2023-XX-004]</td>
+                    <td class="py-3 text-slate-300">Contact Validation & Testing</td>
+                    <td class="py-3 text-right">
+                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Notes in Card Footer -->
+            <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+              <span>Submitted for Mid-Project Assessment</span>
+              <span class="text-indigo-400 font-semibold">Semester: Fall 2026</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CONTACT SECTION WITH REAL-TIME VALIDATION
+       ========================================== -->
+  <section id="contact" class="py-20 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Title -->
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold mb-3">
+          <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+          Get in Touch
+        </span>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Contact Project Support</h2>
+        <p class="text-sm text-slate-600 mt-2">
+          Have questions or feedback regarding our CSE-3532 mid-project? Send us a message using the validated form below.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-5xl mx-auto">
+        
+        <!-- Left: Form Card -->
+        <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl shadow-slate-100">
+          
+          <!-- Success Notification Banner -->
+          <div id="contact-success-alert" class="hidden mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <h4 class="text-xs font-bold text-emerald-900">Message Delivered Successfully!</h4>
+                <p id="contact-success-text" class="text-xs text-emerald-700 mt-0.5 leading-relaxed"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- The Form -->
+          <form id="contact-form" novalidate class="space-y-4">
+            
+            <!-- Full Name Field -->
+            <div>
+              <label for="contact-name" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
+                Full Name <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="contact-name" 
+                placeholder="e.g. Mahfuzur Rahman"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
+              />
+              <p id="contact-name-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
+            </div>
+
+            <!-- Email Address Field -->
+            <div>
+              <label for="contact-email" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
+                Email Address <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="email" 
+                id="contact-email" 
+                placeholder="e.g. student@department.edu.bd"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
+              />
+              <p id="contact-email-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
+            </div>
+
+            <!-- Subject Field -->
+            <div>
+              <label for="contact-subject" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
+                Subject <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="contact-subject" 
+                placeholder="e.g. Inquiring about checkout balance simulation"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
+              />
+              <p id="contact-subject-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
+            </div>
+
+            <!-- Message Field -->
+            <div>
+              <label for="contact-message" class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">
+                Message <span class="text-rose-500">*</span>
+              </label>
+              <textarea 
+                id="contact-message" 
+                rows="4" 
+                placeholder="Please describe your message or project question in detail (minimum 10 characters)..."
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all resize-y"
+              ></textarea>
+              <p id="contact-message-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="w-full py-3.5 px-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md shadow-indigo-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+              <span>Send Message</span>
+            </button>
+
+          </form>
+
+        </div>
+
+        <!-- Right: Information & Academic Contact Details -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+          
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Course & Lab Info</h3>
+            
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Campus Location</span>
+                <p class="text-xs text-slate-700 mt-0.5">Department of Computer Science & Engineering, Academic Building 2, Dhaka, Bangladesh</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Project Email</span>
+                <p class="text-xs text-slate-700 mt-0.5 font-medium">smartshop.cse3532@gmail.com</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Consultation Hours</span>
+                <p class="text-xs text-slate-700 mt-0.5">Sunday - Thursday: 10:00 AM - 4:30 PM (Lab 402)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Demo Assistance Box -->
+          <div class="bg-indigo-900 text-white p-6 rounded-3xl border border-indigo-800 shadow-md">
+            <h4 class="text-sm font-bold text-indigo-100 mb-2">Need Instant Demo Assistance?</h4>
+            <p class="text-xs text-indigo-200 leading-relaxed mb-4">
+              Remember to test with coupon <strong class="text-amber-300">SMART10</strong> and check your demo balance. You can add ৳1,000 whenever your wallet falls short!
+            </p>
+            <div class="flex items-center gap-3">
+              <button 
+                type="button" 
+                data-action="add-money"
+                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all"
+              >
+                + Top Up ৳1,000
+              </button>
+              <button 
+                type="button" 
+                data-action="toggle-cart"
+                class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl border border-white/20 transition-all"
+              >
+                Inspect Cart
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        
+        <!-- Brand Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+            <span class="text-xl font-black text-white">Smart<span class="text-indigo-400">Shop</span></span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+            SmartShop is an academic e-commerce mid-project built strictly according to CSE-3532 specifications using only HTML5, Tailwind CSS utility classes, and Vanilla JavaScript DOM manipulation.
+          </p>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-[11px] text-amber-300">
+            <span>⚠️ Simulated BDT Economy — No real transactions</span>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Navigation</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
+            <li><a href="#products" class="hover:text-white transition-colors">Product Catalog</a></li>
+            <li><a href="#reviews" class="hover:text-white transition-colors">Customer Reviews</a></li>
+            <li><a href="#about" class="hover:text-white transition-colors">About Project</a></li>
+            <li><a href="#contact" class="hover:text-white transition-colors">Contact Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Tech Stack</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li>• Semantic HTML5 Markup</li>
+            <li>• Tailwind CSS Utilities</li>
+            <li>• Vanilla JavaScript DOM</li>
+            <li>• FakeStore REST API</li>
+            <li>• Browser LocalStorage</li>
+            <li>• JSON Reviews Stream</li>
+          </ul>
+        </div>
+
+        <!-- Course Details -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Academic Details</h4>
+          <div class="text-xs space-y-1.5">
+            <p class="text-white font-medium">CSE-3532: Web Technologies</p>
+            <p class="text-slate-400">Mid-Project Demonstration</p>
+            <p class="text-slate-400">Academic Term: Fall 2026</p>
+            <div class="pt-2">
+              <span class="text-[11px] text-indigo-400 font-semibold block">Team Members:</span>
+              <p class="text-[11px] text-slate-400">See About Section Table</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <p>© 2026 SmartShop. CSE-3532 Mid-Project. All rights reserved.</p>
+        <p class="text-center sm:text-right">
+          Simulated BDT Currency & Wallet. Strictly for Educational & Evaluation Purposes.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       CART SLIDE-OVER DRAWER & BACKDROP
+       ========================================== -->
+  <div 
+    id="cart-backdrop" 
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"
+  ></div>
+
+  <div 
+    id="cart-drawer" 
+    class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out"
+  >
+    <!-- Cart Header -->
+    <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Your Shopping Cart</h3>
+          <span class="text-[11px] text-slate-500">Review items & checkout</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button 
+          type="button" 
+          id="cart-clear-all-btn" 
+          class="text-xs text-slate-400 hover:text-red-500 transition-colors p-1"
+          title="Clear all cart items"
+        >
+          Clear
+        </button>
+        <button 
+          type="button" 
+          id="cart-close-btn"
+          class="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200 transition-colors"
+          aria-label="Close cart"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Demo Balance Bar inside Cart -->
+    <div class="bg-indigo-50 border-b border-indigo-100 p-3.5 flex items-center justify-between">
+      <div>
+        <span class="text-[10px] uppercase font-bold text-indigo-700 tracking-wider block">Available Demo Balance</span>
+        <span data-bind="demo-balance" class="text-sm font-black text-indigo-900">৳ 1,000.00</span>
+      </div>
+      <button 
+        type="button" 
+        data-action="add-money"
+        class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold rounded-lg shadow-sm transition-all flex items-center gap-1"
+      >
+        <span>+ Add ৳1,000</span>
+      </button>
+    </div>
+
+    <!-- Insufficient Balance Warning Banner -->
+    <div id="cart-balance-warning" class="hidden items-center gap-2 bg-rose-50 border-b border-rose-200 p-3 text-rose-800 text-xs">
+      <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <div class="flex-1">
+        <span id="cart-balance-warning-text" class="font-bold">Insufficient demo balance!</span>
+        <span class="block text-[11px] text-rose-600">Click "+ Add ৳1,000" above to top up.</span>
+      </div>
+    </div>
+
+    <!-- Cart Items Scrollable List -->
+    <div class="flex-1 overflow-y-auto p-5 space-y-1" id="cart-items-container">
+      <!-- Populated dynamically by js/cart.js -->
+    </div>
+
+    <!-- Cart Empty State -->
+    <div id="cart-empty-state" class="hidden flex-1 flex flex-col items-center justify-center p-8 text-center">
+      <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+      </div>
+      <h4 class="text-base font-bold text-slate-800 mb-1">Your Cart is Empty</h4>
+      <p class="text-xs text-slate-500 mb-6 max-w-xs">Looks like you haven't added any products to your shopping cart yet.</p>
+      <button 
+        type="button" 
+        onclick="Cart.closeCartDrawer();" 
+        class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all"
+      >
+        Start Shopping Now
+      </button>
+    </div>
+
+    <!-- Cart Footer Calculations & Checkout -->
+    <div id="cart-footer" class="p-5 border-t border-slate-200 bg-slate-50 space-y-4">
+      
+      <!-- Coupon Code Section -->
+      <div>
+        <form id="coupon-form" class="flex gap-2">
+          <input 
+            type="text" 
+            id="coupon-input"
+            placeholder="Coupon Code (e.g. SMART10)" 
+            class="flex-1 uppercase px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-indigo-600 font-semibold"
+          />
+          <button 
+            type="submit" 
+            class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all"
+          >
+            Apply
+          </button>
+        </form>
+
+        <!-- Coupon Applied Badge -->
+        <div id="coupon-applied-badge" class="hidden flex items-center justify-between p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs">
+          <div class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Coupon <strong id="coupon-applied-code" class="font-mono">SMART10</strong> applied (10% OFF)!</span>
+          </div>
+          <button type="button" id="coupon-remove-btn" class="text-rose-600 hover:text-rose-800 text-xs font-bold underline">Remove</button>
+        </div>
+      </div>
+
+      <!-- Financial Calculation Rows -->
+      <div class="space-y-1.5 text-xs text-slate-600 border-t border-slate-200 pt-3">
+        <div class="flex justify-between">
+          <span>Subtotal:</span>
+          <span id="cart-subtotal" class="font-bold text-slate-900">৳ 0.00</span>
+        </div>
+        
+        <div id="cart-discount-row" class="hidden justify-between text-emerald-600 font-semibold">
+          <span>Discount (10% SMART10):</span>
+          <span id="cart-discount">-৳ 0.00</span>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-1.5">
+            <span>Shipping & Delivery:</span>
+            <span id="cart-delivery-badge" class="hidden text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold">Free applied!</span>
+          </div>
+          <span id="cart-delivery" class="font-bold text-slate-900">৳ 60.00</span>
+        </div>
+
+        <div class="flex justify-between text-sm font-extrabold text-slate-900 pt-2 border-t border-slate-200">
+          <span>Payable Total:</span>
+          <span id="cart-payable-total" class="text-indigo-600">৳ 0.00</span>
+        </div>
+      </div>
+
+      <!-- Checkout Action Button -->
+      <div>
+        <button 
+          type="button" 
+          id="cart-checkout-btn"
+          class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md shadow-indigo-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>Complete Demo Checkout</span>
+        </button>
+        <span class="block text-center text-[10px] text-slate-400 mt-2">
+          Demo Checkout • Requires Demo Balance • No Real Charge
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       PRODUCT QUICK VIEW MODAL
+       ========================================== -->
+  <div id="quick-view-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+    <div class="min-h-full flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 z-10 overflow-hidden">
+        
+        <!-- Close Button -->
+        <button 
+          type="button" 
+          id="modal-close-btn"
+          class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors"
+          aria-label="Close modal"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+          
+          <!-- Image -->
+          <div class="w-full h-64 bg-slate-50 rounded-2xl p-6 flex items-center justify-center border border-slate-100">
+            <img 
+              id="modal-product-image" 
+              src="" 
+              alt="Product Details" 
+              class="max-h-full max-w-full object-contain"
+            />
+          </div>
+
+          <!-- Product Details -->
+          <div class="flex flex-col">
+            <span id="modal-product-category" class="inline-block text-[11px] font-bold text-indigo-700 uppercase tracking-wider bg-indigo-50 px-2.5 py-0.5 rounded-full w-max mb-2">
+              Category
+            </span>
+            <h3 id="modal-product-title" class="text-base font-bold text-slate-900 leading-snug mb-2">
+              Product Title
+            </h3>
+
+            <!-- Rating -->
+            <div class="flex items-center gap-2 mb-3">
+              <div id="modal-product-stars" class="flex items-center"></div>
+              <span id="modal-product-rating-score" class="text-xs font-bold text-slate-800">4.5</span>
+              <span id="modal-product-rating-count" class="text-xs text-slate-400">(120 reviews)</span>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-4">
+              <span id="modal-product-price" class="text-2xl font-black text-indigo-600">৳ 0.00</span>
+              <span class="text-[10px] text-slate-400 font-medium block">Simulated BDT Price</span>
+            </div>
+
+            <!-- Description -->
+            <p id="modal-product-description" class="text-xs text-slate-600 leading-relaxed max-h-32 overflow-y-auto mb-6 pr-2">
+              Product description goes here.
+            </p>
+
+            <!-- Quantity & Add to Cart -->
+            <div class="pt-4 border-t border-slate-100 flex items-center gap-4">
+              <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                <button type="button" id="modal-qty-minus" class="w-8 h-9 flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200">-</button>
+                <input type="number" id="modal-product-qty" value="1" min="1" class="w-10 text-center text-xs font-bold text-slate-800 bg-white border-0 py-2 focus:outline-none" />
+                <button type="button" id="modal-qty-plus" class="w-8 h-9 flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200">+</button>
+              </div>
+
+              <button 
+                type="button" 
+                id="modal-add-to-cart-btn"
+                class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md shadow-indigo-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Add to Cart</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       ORDER RECEIPT / CONFIRMATION MODAL
+       ========================================== -->
+  <div id="order-receipt-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+    <div class="min-h-full flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 z-10 text-slate-800">
+        
+        <!-- Header -->
+        <div class="text-center pb-6 border-b border-slate-100">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3 shadow-inner">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+            Payment & Order Confirmed
+          </span>
+          <h3 class="text-xl font-black text-slate-900 mt-2">Simulated Order Placed!</h3>
+          <p class="text-xs text-slate-500 mt-1">Thank you for testing the SmartShop demo store.</p>
+        </div>
+
+        <!-- Order Meta -->
+        <div class="py-4 border-b border-slate-100 flex items-center justify-between text-xs">
+          <div>
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Order ID</span>
+            <span id="receipt-order-id" class="font-mono font-bold text-slate-900">#ORD-000000</span>
+          </div>
+          <div class="text-right">
+            <span class="text-slate-400 block text-[10px] uppercase font-bold">Order Timestamp</span>
+            <span id="receipt-date" class="font-medium text-slate-700">Today</span>
+          </div>
+        </div>
+
+        <!-- Purchased Items Summary -->
+        <div class="py-4 border-b border-slate-100 max-h-48 overflow-y-auto">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-100 uppercase text-[10px]">
+                <th class="pb-2">Item</th>
+                <th class="pb-2 text-center">Qty</th>
+                <th class="pb-2 text-right">Price</th>
+              </tr>
+            </thead>
+            <tbody id="receipt-items-table" class="divide-y divide-slate-50">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Summary Totals -->
+        <div class="py-4 space-y-1.5 text-xs text-slate-600 border-b border-slate-100">
+          <div class="flex justify-between">
+            <span>Subtotal:</span>
+            <span id="receipt-subtotal" class="font-bold text-slate-800">৳ 0.00</span>
+          </div>
+          <div id="receipt-discount-row" class="hidden justify-between text-emerald-600 font-semibold">
+            <span>Discount (SMART10):</span>
+            <span id="receipt-discount">-৳ 0.00</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Delivery Fee:</span>
+            <span id="receipt-delivery" class="font-bold text-slate-800">FREE</span>
+          </div>
+          <div class="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-100">
+            <span>Total Deducted:</span>
+            <span id="receipt-total" class="text-indigo-600">৳ 0.00</span>
+          </div>
+          <div class="flex justify-between text-xs font-semibold text-slate-700 pt-1">
+            <span>Remaining Demo Balance:</span>
+            <span id="receipt-balance-remaining" class="text-emerald-700 font-bold">৳ 0.00</span>
+          </div>
+        </div>
+
+        <!-- Dismiss button -->
+        <div class="pt-6 flex gap-3">
+          <button 
+            type="button" 
+            onclick="App.closeOrderReceiptModal();"
+            class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md transition-all"
+          >
+            Done & Continue Shopping
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       GLOBAL TOAST NOTIFICATION CONTAINER
+       ========================================== -->
+  <div 
+    id="toast-container" 
+    class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-sm w-full px-4 sm:px-0"
+  ></div>
+
+  <!-- ==========================================
+       FLOATING BACK-TO-TOP BUTTON
+       ========================================== -->
+  <button 
+    type="button" 
+    id="back-to-top-btn"
+    class="fixed bottom-5 left-5 z-40 w-11 h-11 rounded-full bg-slate-900 text-white shadow-xl hover:bg-indigo-600 flex items-center justify-center transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:scale-110 active:scale-95"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+  </button>
+
+  <!-- ==========================================
+       VANILLA JAVASCRIPT MODULE SCRIPTS
+       Strictly Vanilla JS DOM manipulation
+       ========================================== -->
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/contact.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

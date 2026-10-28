@@ -1,14 +1,19 @@
 /**
  * SmartShop
- * Cart, Demo Balance, Coupon, and Checkout Management
- * Strictly Vanilla JavaScript DOM & LocalStorage
+ * Shopping Cart, Account Wallet Balance, Coupon, Checkout & Order History Management
+ * Strictly Vanilla JavaScript DOM & LocalStorage (Zero Frameworks, Zero Custom CSS)
+ * 
+ * Note: Account balance, coupon validation, and order history are managed via client-side localStorage simulation.
  */
 
 const Cart = {
-  // Constants
+  // Storage Keys
   STORAGE_CART_KEY: 'smartshop_cart',
   STORAGE_BALANCE_KEY: 'smartshop_balance',
   STORAGE_COUPON_KEY: 'smartshop_coupon',
+  STORAGE_ORDERS_KEY: 'smartshop_orders',
+
+  // Business Rules
   INITIAL_BALANCE: 1000.0,
   ADD_MONEY_AMOUNT: 1000.0,
   COUPON_CODE: 'SMART10',
@@ -20,9 +25,10 @@ const Cart = {
   items: [],
   balance: 1000.0,
   appliedCoupon: null,
+  orders: [],
 
   /**
-   * Initialize Cart state from LocalStorage
+   * Initialize Cart state from LocalStorage and bind events
    */
   init() {
     this.loadState();
@@ -68,6 +74,15 @@ const Cart = {
     } catch (e) {
       this.appliedCoupon = null;
     }
+
+    // Load Orders History
+    try {
+      const storedOrders = localStorage.getItem(this.STORAGE_ORDERS_KEY);
+      this.orders = storedOrders ? JSON.parse(storedOrders) : [];
+    } catch (e) {
+      console.error('Failed to load orders from localStorage:', e);
+      this.orders = [];
+    }
   },
 
   /**
@@ -108,6 +123,17 @@ const Cart = {
   },
 
   /**
+   * Save order history to localStorage
+   */
+  saveOrders() {
+    try {
+      localStorage.setItem(this.STORAGE_ORDERS_KEY, JSON.stringify(this.orders));
+    } catch (e) {
+      console.error('Error saving orders to localStorage:', e);
+    }
+  },
+
+  /**
    * Add a product to the cart
    * @param {Object} product
    * @param {number} quantity
@@ -134,7 +160,7 @@ const Cart = {
     this.render();
 
     if (window.App && typeof window.App.showToast === 'function') {
-      window.App.showToast(`"${product.title.slice(0, 24)}..." added to cart!`, 'success');
+      window.App.showToast(`"${product.title.slice(0, 24)}..." added to cart`, 'success');
     }
   },
 
@@ -186,7 +212,7 @@ const Cart = {
   },
 
   /**
-   * Add money to demo balance (+1000 BDT)
+   * Add funds to Account Wallet (+1000 BDT)
    * @param {number} amount
    */
   addMoney(amount = this.ADD_MONEY_AMOUNT) {
@@ -195,19 +221,7 @@ const Cart = {
     this.render();
 
     if (window.App && typeof window.App.showToast === 'function') {
-      window.App.showToast(`Added ৳ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })} to Demo Balance! New Balance: ৳ ${this.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 'success');
-    }
-  },
-
-  /**
-   * Reset balance for testing if requested
-   */
-  resetBalance() {
-    this.balance = this.INITIAL_BALANCE;
-    this.saveBalance();
-    this.render();
-    if (window.App && typeof window.App.showToast === 'function') {
-      window.App.showToast(`Demo balance reset to initial ৳ ${this.INITIAL_BALANCE.toFixed(2)}`, 'info');
+      window.App.showToast(`Added ৳ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })} to Wallet Balance. Available: ৳ ${this.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 'success');
     }
   },
 
@@ -220,7 +234,7 @@ const Cart = {
 
     if (!cleanCode) {
       if (window.App && typeof window.App.showToast === 'function') {
-        window.App.showToast('Please enter a coupon code.', 'warning');
+        window.App.showToast('Please enter a voucher code.', 'warning');
       }
       return false;
     }
@@ -230,12 +244,12 @@ const Cart = {
       this.saveCoupon();
       this.render();
       if (window.App && typeof window.App.showToast === 'function') {
-        window.App.showToast(`Coupon SMART10 applied! 10% discount deducted.`, 'success');
+        window.App.showToast('Voucher SMART10 applied! 10% discount deducted from subtotal.', 'success');
       }
       return true;
     } else {
       if (window.App && typeof window.App.showToast === 'function') {
-        window.App.showToast(`Invalid coupon "${cleanCode}". Use coupon SMART10.`, 'error');
+        window.App.showToast(`Invalid coupon code "${cleanCode}". Try SMART10.`, 'error');
       }
       return false;
     }
@@ -249,7 +263,7 @@ const Cart = {
     this.saveCoupon();
     this.render();
     if (window.App && typeof window.App.showToast === 'function') {
-      window.App.showToast('Coupon removed.', 'info');
+      window.App.showToast('Voucher code removed.', 'info');
     }
   },
 
@@ -287,23 +301,22 @@ const Cart = {
   },
 
   /**
-   * Perform checkout with balance validation
+   * Initiate Checkout flow: checks cart items and balance
    */
-  checkout() {
+  startCheckout() {
     const calc = this.getCalculations();
 
     if (this.items.length === 0) {
       if (window.App && typeof window.App.showToast === 'function') {
-        window.App.showToast('Your cart is empty. Add products before checking out!', 'warning');
+        window.App.showToast('Your shopping cart is empty.', 'warning');
       }
-      return false;
+      return;
     }
 
-    // Check if final payable amount exceeds demo balance
     if (calc.payableTotal > this.balance) {
       const shortage = (calc.payableTotal - this.balance).toLocaleString('en-US', { minimumFractionDigits: 2 });
       if (window.App && typeof window.App.showToast === 'function') {
-        window.App.showToast(`Insufficient Demo Balance! Short by ৳ ${shortage}. Click "+ Add Money" to proceed.`, 'error');
+        window.App.showToast(`Insufficient Wallet Balance! Short by ৳ ${shortage}. Click "+ Add Funds" to top up.`, 'error');
       }
 
       // Highlight the balance error element in the cart drawer
@@ -315,44 +328,245 @@ const Cart = {
           warningBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
       }
+      return;
+    }
+
+    // Close cart drawer and open checkout modal
+    this.closeCartDrawer();
+    this.openCheckoutModal();
+  },
+
+  /**
+   * Open Checkout Modal and populate summary
+   */
+  openCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    if (!modal) return;
+
+    const calc = this.getCalculations();
+
+    // Populate checkout financial summary
+    const summarySubtotal = document.getElementById('checkout-summary-subtotal');
+    const summaryDiscountRow = document.getElementById('checkout-summary-discount-row');
+    const summaryDiscount = document.getElementById('checkout-summary-discount');
+    const summaryDelivery = document.getElementById('checkout-summary-delivery');
+    const summaryTotal = document.getElementById('checkout-summary-total');
+    const summaryBalance = document.getElementById('checkout-summary-balance');
+    const summaryRemaining = document.getElementById('checkout-summary-remaining');
+
+    if (summarySubtotal) summarySubtotal.textContent = `৳ ${calc.subtotal.toFixed(2)}`;
+    if (summaryDiscountRow && summaryDiscount) {
+      if (calc.discount > 0) {
+        summaryDiscountRow.classList.remove('hidden');
+        summaryDiscountRow.classList.add('flex');
+        summaryDiscount.textContent = `-৳ ${calc.discount.toFixed(2)}`;
+      } else {
+        summaryDiscountRow.classList.add('hidden');
+        summaryDiscountRow.classList.remove('flex');
+      }
+    }
+
+    if (summaryDelivery) {
+      summaryDelivery.textContent = calc.delivery === 0 ? 'FREE' : `৳ ${calc.delivery.toFixed(2)}`;
+    }
+    if (summaryTotal) summaryTotal.textContent = `৳ ${calc.payableTotal.toFixed(2)}`;
+    if (summaryBalance) summaryBalance.textContent = `৳ ${this.balance.toFixed(2)}`;
+    if (summaryRemaining) {
+      const remaining = Math.max(0, this.balance - calc.payableTotal);
+      summaryRemaining.textContent = `৳ ${remaining.toFixed(2)}`;
+    }
+
+    // Populate items preview in checkout
+    const checkoutItemsList = document.getElementById('checkout-items-preview');
+    if (checkoutItemsList) {
+      checkoutItemsList.innerHTML = this.items.map(item => `
+        <div class="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+          <img src="${item.image}" alt="${item.title}" class="w-10 h-10 object-contain p-1 border border-slate-200 rounded-md bg-white">
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-semibold text-slate-800 truncate">${item.title}</p>
+            <p class="text-[11px] text-slate-500">Qty: ${item.quantity} × ৳ ${item.price.toFixed(2)}</p>
+          </div>
+          <span class="text-xs font-bold text-slate-900">৳ ${(item.price * item.quantity).toFixed(2)}</span>
+        </div>
+      `).join('');
+    }
+
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  },
+
+  /**
+   * Close Checkout Modal
+   */
+  closeCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  },
+
+  /**
+   * Process & finalize checkout with delivery validation
+   */
+  processOrder() {
+    const calc = this.getCalculations();
+
+    // Verify balance
+    if (calc.payableTotal > this.balance) {
+      if (window.App && typeof window.App.showToast === 'function') {
+        window.App.showToast('Insufficient wallet balance to complete this order.', 'error');
+      }
       return false;
     }
 
-    // Checkout successful: Deduct balance and capture order details
-    const orderItems = [...this.items];
-    const orderSummary = {
-      orderId: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
-      date: new Date().toLocaleString(),
-      items: orderItems,
+    // Form inputs validation
+    const nameInput = document.getElementById('checkout-name');
+    const phoneInput = document.getElementById('checkout-phone');
+    const addressInput = document.getElementById('checkout-address');
+    const cityInput = document.getElementById('checkout-city');
+
+    let isValid = true;
+
+    const checkField = (input, minLen = 2) => {
+      if (!input) return true;
+      const val = input.value.trim();
+      const errEl = document.getElementById(`${input.id}-error`);
+      if (val.length < minLen) {
+        input.classList.add('border-red-500');
+        input.classList.remove('border-slate-300');
+        if (errEl) errEl.classList.remove('hidden');
+        return false;
+      } else {
+        input.classList.remove('border-red-500');
+        input.classList.add('border-slate-300');
+        if (errEl) errEl.classList.add('hidden');
+        return true;
+      }
+    };
+
+    if (!checkField(nameInput, 2)) isValid = false;
+    if (!checkField(phoneInput, 7)) isValid = false;
+    if (!checkField(addressInput, 5)) isValid = false;
+    if (!checkField(cityInput, 2)) isValid = false;
+
+    if (!isValid) {
+      if (window.App && typeof window.App.showToast === 'function') {
+        window.App.showToast('Please fill in all required delivery details.', 'warning');
+      }
+      return false;
+    }
+
+    // Create Order Record
+    const orderRecord = {
+      orderId: 'SS-' + Math.floor(100000 + Math.random() * 900000),
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      customerName: nameInput ? nameInput.value.trim() : 'Valued Customer',
+      phone: phoneInput ? phoneInput.value.trim() : '',
+      address: addressInput ? addressInput.value.trim() : '',
+      city: cityInput ? cityInput.value.trim() : '',
+      items: [...this.items],
       subtotal: calc.subtotal,
       discount: calc.discount,
       delivery: calc.delivery,
       totalPaid: calc.payableTotal,
-      paidFromBalance: calc.payableTotal,
       previousBalance: this.balance,
-      remainingBalance: parseFloat((this.balance - calc.payableTotal).toFixed(2))
+      remainingBalance: parseFloat((this.balance - calc.payableTotal).toFixed(2)),
+      status: 'Confirmed & Processing'
     };
 
     // Deduct balance
-    this.balance = orderSummary.remainingBalance;
+    this.balance = orderRecord.remainingBalance;
     this.saveBalance();
+
+    // Save to Orders History
+    this.orders.unshift(orderRecord);
+    this.saveOrders();
 
     // Clear cart and coupon
     this.clearCart();
 
-    // Close cart drawer
-    this.closeCartDrawer();
+    // Close checkout modal
+    this.closeCheckoutModal();
 
-    // Show order confirmation receipt modal
-    if (window.App && typeof window.App.showOrderReceiptModal === 'function') {
-      window.App.showOrderReceiptModal(orderSummary);
+    // Display Order Confirmation Screen
+    if (window.App && typeof window.App.showOrderConfirmation === 'function') {
+      window.App.showOrderConfirmation(orderRecord);
     }
 
     if (window.App && typeof window.App.showToast === 'function') {
-      window.App.showToast(`Order #${orderSummary.orderId} placed successfully! ৳ ${calc.payableTotal.toFixed(2)} deducted.`, 'success');
+      window.App.showToast(`Order #${orderRecord.orderId} placed successfully!`, 'success');
     }
 
     return true;
+  },
+
+  /**
+   * Open Order History Modal
+   */
+  openOrderHistoryModal() {
+    const modal = document.getElementById('orders-modal');
+    if (!modal) return;
+
+    const container = document.getElementById('orders-list-container');
+    const emptyState = document.getElementById('orders-empty-state');
+
+    if (container && emptyState) {
+      if (this.orders.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        container.innerHTML = this.orders.map(order => `
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 text-xs">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-900 font-mono text-sm">#${order.orderId}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">${order.status}</span>
+              </div>
+              <span class="text-slate-400">${order.date}</span>
+            </div>
+
+            <div class="space-y-2">
+              ${order.items.map(item => `
+                <div class="flex items-center justify-between text-xs py-1">
+                  <div class="flex items-center gap-2 max-w-[70%]">
+                    <img src="${item.image}" alt="${item.title}" class="w-8 h-8 object-contain rounded p-0.5 border border-slate-100">
+                    <span class="text-slate-700 truncate font-medium">${item.title}</span>
+                  </div>
+                  <span class="text-slate-500 font-medium">Qty: ${item.quantity} × ৳ ${item.price.toFixed(2)}</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <div>
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Shipped To:</span>
+                <span class="text-slate-700 font-medium">${order.customerName}, ${order.city}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Total Paid:</span>
+                <span class="text-sm font-extrabold text-indigo-700">৳ ${order.totalPaid.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  },
+
+  /**
+   * Close Order History Modal
+   */
+  closeOrderHistoryModal() {
+    const modal = document.getElementById('orders-modal');
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
   },
 
   /**
@@ -377,17 +591,11 @@ const Cart = {
       backdrop.addEventListener('click', () => this.closeCartDrawer());
     }
 
-    // Add Money buttons
+    // Add Funds buttons
     const addMoneyButtons = document.querySelectorAll('[data-action="add-money"]');
     addMoneyButtons.forEach(btn => {
       btn.addEventListener('click', () => this.addMoney(this.ADD_MONEY_AMOUNT));
     });
-
-    // Reset balance button (if present)
-    const resetBalanceBtn = document.getElementById('reset-balance-btn');
-    if (resetBalanceBtn) {
-      resetBalanceBtn.addEventListener('click', () => this.resetBalance());
-    }
 
     // Coupon form submission
     const couponForm = document.getElementById('coupon-form');
@@ -407,10 +615,40 @@ const Cart = {
       removeCouponBtn.addEventListener('click', () => this.removeCoupon());
     }
 
-    // Checkout button
+    // Checkout initiate button
     const checkoutBtn = document.getElementById('cart-checkout-btn');
     if (checkoutBtn) {
-      checkoutBtn.addEventListener('click', () => this.checkout());
+      checkoutBtn.addEventListener('click', () => this.startCheckout());
+    }
+
+    // Checkout form confirm button
+    const confirmOrderBtn = document.getElementById('checkout-confirm-btn');
+    if (confirmOrderBtn) {
+      confirmOrderBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.processOrder();
+      });
+    }
+
+    // Checkout modal close
+    const checkoutCloseBtn = document.getElementById('checkout-close-btn');
+    if (checkoutCloseBtn) {
+      checkoutCloseBtn.addEventListener('click', () => this.closeCheckoutModal());
+    }
+
+    // Orders history toggle buttons
+    const ordersToggles = document.querySelectorAll('[data-action="view-orders"]');
+    ordersToggles.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.openOrderHistoryModal();
+      });
+    });
+
+    // Orders modal close
+    const ordersCloseBtn = document.getElementById('orders-close-btn');
+    if (ordersCloseBtn) {
+      ordersCloseBtn.addEventListener('click', () => this.closeOrderHistoryModal());
     }
 
     // Clear cart button
@@ -418,10 +656,10 @@ const Cart = {
     if (clearCartBtn) {
       clearCartBtn.addEventListener('click', () => {
         if (this.items.length === 0) return;
-        if (confirm('Are you sure you want to clear your cart?')) {
+        if (confirm('Are you sure you want to remove all items from your cart?')) {
           this.clearCart();
           if (window.App && typeof window.App.showToast === 'function') {
-            window.App.showToast('Cart cleared.', 'info');
+            window.App.showToast('Shopping cart cleared.', 'info');
           }
         }
       });
@@ -488,7 +726,7 @@ const Cart = {
   render() {
     const calc = this.getCalculations();
 
-    // 1. Update Balance displays everywhere
+    // 1. Update Wallet Balance displays everywhere
     const balanceDisplays = document.querySelectorAll('[data-bind="demo-balance"]');
     const formattedBalance = `৳ ${this.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     balanceDisplays.forEach(el => {
@@ -524,18 +762,18 @@ const Cart = {
           const itemTotal = (item.price * item.quantity).toFixed(2);
           return `
             <div class="flex items-center gap-4 py-4 border-b border-slate-100 group">
-              <div class="w-16 h-16 shrink-0 bg-slate-50 border border-slate-200 rounded-lg p-1 flex items-center justify-center overflow-hidden">
+              <div class="w-16 h-16 shrink-0 bg-slate-50 border border-slate-200 rounded-xl p-1.5 flex items-center justify-center overflow-hidden">
                 <img src="${item.image}" alt="${item.title}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200">
               </div>
               <div class="flex-1 min-w-0">
                 <h4 class="text-xs font-semibold text-slate-800 line-clamp-1" title="${item.title}">${item.title}</h4>
                 <div class="flex items-center gap-2 mt-1">
-                  <span class="text-xs text-indigo-600 font-bold">৳ ${item.price.toFixed(2)}</span>
+                  <span class="text-xs text-indigo-700 font-bold">৳ ${item.price.toFixed(2)}</span>
                   <span class="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-medium">${item.category}</span>
                 </div>
                 <!-- Quantity & Total -->
-                <div class="flex items-center justify-between mt-2">
-                  <div class="flex items-center border border-slate-200 rounded-md overflow-hidden bg-slate-50">
+                <div class="flex items-center justify-between mt-2.5">
+                  <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
                     <button type="button" class="w-6 h-6 flex items-center justify-center text-slate-600 hover:bg-slate-200 text-xs font-bold transition-colors" onclick="Cart.updateQuantity(${item.id}, -1)" aria-label="Decrease quantity">-</button>
                     <span class="w-8 text-center text-xs font-semibold text-slate-800 bg-white py-0.5">${item.quantity}</span>
                     <button type="button" class="w-6 h-6 flex items-center justify-center text-slate-600 hover:bg-slate-200 text-xs font-bold transition-colors" onclick="Cart.updateQuantity(${item.id}, 1)" aria-label="Increase quantity">+</button>
@@ -609,7 +847,7 @@ const Cart = {
       if (couponInput) couponInput.value = '';
     }
 
-    // 6. Update Demo Balance Sufficiency Warning
+    // 6. Update Wallet Balance Sufficiency Warning
     const warningBanner = document.getElementById('cart-balance-warning');
     const warningText = document.getElementById('cart-balance-warning-text');
     const checkoutBtn = document.getElementById('cart-checkout-btn');
@@ -619,7 +857,7 @@ const Cart = {
         const shortage = (calc.payableTotal - this.balance).toLocaleString('en-US', { minimumFractionDigits: 2 });
         warningBanner.classList.remove('hidden');
         warningBanner.classList.add('flex');
-        warningText.textContent = `Insufficient demo balance! Need ৳ ${shortage} more.`;
+        warningText.textContent = `Insufficient balance (Need ৳ ${shortage} more).`;
         checkoutBtn.classList.add('opacity-75');
       } else {
         warningBanner.classList.add('hidden');

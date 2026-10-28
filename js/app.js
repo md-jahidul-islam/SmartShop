@@ -24,11 +24,11 @@ const App = {
     if (window.ReviewsCarousel) window.ReviewsCarousel.init();
     if (window.Contact) window.Contact.init();
 
-    console.log('%cSmartShop Initialized Successfully!', 'color: #4f46e5; font-size: 14px; font-weight: bold;');
+    console.log('%cSmartShop Storefront Initialized Successfully', 'color: #f59e0b; font-size: 14px; font-weight: bold;');
   },
 
   /**
-   * Sticky Navbar scroll indicator
+   * Sticky Navbar scroll behavior
    */
   setupStickyNavbar() {
     const navbar = document.getElementById('main-navbar');
@@ -36,17 +36,15 @@ const App = {
 
     window.addEventListener('scroll', () => {
       if (window.scrollY > 20) {
-        navbar.classList.add('shadow-md', 'bg-white/95');
-        navbar.classList.remove('bg-white/80');
+        navbar.classList.add('shadow-lg');
       } else {
-        navbar.classList.remove('shadow-md', 'bg-white/95');
-        navbar.classList.add('bg-white/80');
+        navbar.classList.remove('shadow-lg');
       }
     }, { passive: true });
   },
 
   /**
-   * Active Section Highlighting in Sticky Navbar
+   * Active Section Highlighting in Navigation
    */
   setupActiveNavHighlight() {
     const sectionIds = ['home', 'products', 'reviews', 'about', 'contact'];
@@ -55,7 +53,7 @@ const App = {
 
     const updateActiveSection = () => {
       const scrollY = window.scrollY;
-      const navHeight = 90; // offset for sticky header
+      const navHeight = 110;
 
       let currentSectionId = sectionIds[0];
 
@@ -71,20 +69,19 @@ const App = {
         }
       }
 
-      // If scrolled to near the bottom, highlight the last section
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
         currentSectionId = 'contact';
       }
 
-      // Update Desktop Links
+      // Update Desktop Sub-navbar Links
       desktopLinks.forEach(link => {
         const href = link.getAttribute('href')?.replace('#', '');
         if (href === currentSectionId) {
-          link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50/80');
-          link.classList.remove('text-slate-700', 'font-semibold');
+          link.classList.add('text-amber-400', 'font-bold', 'border-b-2', 'border-amber-400');
+          link.classList.remove('text-slate-200', 'font-medium', 'border-transparent');
         } else {
-          link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50/80');
-          link.classList.add('text-slate-700', 'font-semibold');
+          link.classList.remove('text-amber-400', 'font-bold', 'border-b-2', 'border-amber-400');
+          link.classList.add('text-slate-200', 'font-medium', 'border-transparent');
         }
       });
 
@@ -92,10 +89,10 @@ const App = {
       mobileLinks.forEach(link => {
         const href = link.getAttribute('href')?.replace('#', '');
         if (href === currentSectionId) {
-          link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50', 'pl-3');
+          link.classList.add('text-amber-600', 'font-bold', 'bg-amber-50', 'pl-3');
           link.classList.remove('text-slate-800', 'font-semibold');
         } else {
-          link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50', 'pl-3');
+          link.classList.remove('text-amber-600', 'font-bold', 'bg-amber-50', 'pl-3');
           link.classList.add('text-slate-800', 'font-semibold');
         }
       });
@@ -128,7 +125,6 @@ const App = {
 
     menuBtn.addEventListener('click', toggleMenu);
 
-    // Auto close mobile menu when clicking a link
     menuLinks.forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
@@ -198,7 +194,7 @@ const App = {
 
     switch (type) {
       case 'success':
-        bgClasses = 'bg-emerald-900/95 text-emerald-100 border-emerald-600 shadow-emerald-900/20';
+        bgClasses = 'bg-slate-900 text-white border-emerald-500 shadow-xl shadow-slate-950/20';
         iconSvg = `
           <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -206,7 +202,7 @@ const App = {
         `;
         break;
       case 'error':
-        bgClasses = 'bg-rose-900/95 text-rose-100 border-rose-600 shadow-rose-900/20';
+        bgClasses = 'bg-slate-900 text-white border-rose-500 shadow-xl shadow-slate-950/20';
         iconSvg = `
           <svg class="w-5 h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -214,7 +210,7 @@ const App = {
         `;
         break;
       case 'warning':
-        bgClasses = 'bg-amber-900/95 text-amber-100 border-amber-600 shadow-amber-900/20';
+        bgClasses = 'bg-slate-900 text-white border-amber-500 shadow-xl shadow-slate-950/20';
         iconSvg = `
           <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -223,7 +219,7 @@ const App = {
         break;
       case 'info':
       default:
-        bgClasses = 'bg-indigo-950/95 text-indigo-100 border-indigo-600 shadow-indigo-950/20';
+        bgClasses = 'bg-slate-900 text-white border-indigo-500 shadow-xl shadow-slate-950/20';
         iconSvg = `
           <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -234,7 +230,7 @@ const App = {
 
     const toast = document.createElement('div');
     toast.id = toastId;
-    toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 max-w-sm pointer-events-auto ${bgClasses}`;
+    toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 max-w-sm pointer-events-auto ${bgClasses}`;
     toast.innerHTML = `
       ${iconSvg}
       <p class="text-xs sm:text-sm font-medium leading-tight flex-1">${message}</p>
@@ -247,13 +243,11 @@ const App = {
 
     container.appendChild(toast);
 
-    // Animate in
     requestAnimationFrame(() => {
       toast.classList.remove('translate-y-2', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
     });
 
-    // Auto remove
     setTimeout(() => {
       toast.classList.add('opacity-0', 'translate-y-2');
       setTimeout(() => {
@@ -263,15 +257,16 @@ const App = {
   },
 
   /**
-   * Display Order Confirmation & Simulated Receipt Modal
+   * Display Order Confirmation Screen / Modal
    * @param {Object} order
    */
-  showOrderReceiptModal(order) {
+  showOrderConfirmation(order) {
     const modal = document.getElementById('order-receipt-modal');
     if (!modal) return;
 
     const orderIdEl = document.getElementById('receipt-order-id');
     const dateEl = document.getElementById('receipt-date');
+    const customerEl = document.getElementById('receipt-customer-info');
     const itemsTable = document.getElementById('receipt-items-table');
     const subtotalEl = document.getElementById('receipt-subtotal');
     const discountRow = document.getElementById('receipt-discount-row');
@@ -280,13 +275,19 @@ const App = {
     const totalEl = document.getElementById('receipt-total');
     const balanceRemainingEl = document.getElementById('receipt-balance-remaining');
 
-    if (orderIdEl) orderIdEl.textContent = order.orderId;
+    if (orderIdEl) orderIdEl.textContent = '#' + order.orderId;
     if (dateEl) dateEl.textContent = order.date;
+    if (customerEl) {
+      customerEl.textContent = `${order.customerName} • ${order.address}, ${order.city} (Phone: ${order.phone})`;
+    }
 
     if (itemsTable) {
       itemsTable.innerHTML = order.items.map(item => `
         <tr class="border-b border-slate-100 text-xs">
-          <td class="py-2.5 font-medium text-slate-800">${item.title.slice(0, 32)}...</td>
+          <td class="py-2.5 font-medium text-slate-800 flex items-center gap-2">
+            <img src="${item.image}" alt="${item.title}" class="w-8 h-8 object-contain rounded p-0.5 border border-slate-100">
+            <span class="truncate max-w-[200px]">${item.title}</span>
+          </td>
           <td class="py-2.5 text-center text-slate-600">${item.quantity}</td>
           <td class="py-2.5 text-right font-semibold text-slate-900">৳ ${(item.price * item.quantity).toFixed(2)}</td>
         </tr>
@@ -318,9 +319,9 @@ const App = {
   },
 
   /**
-   * Close Order Confirmation Receipt Modal
+   * Close Order Confirmation Modal
    */
-  closeOrderReceiptModal() {
+  closeOrderConfirmation() {
     const modal = document.getElementById('order-receipt-modal');
     if (!modal) return;
 

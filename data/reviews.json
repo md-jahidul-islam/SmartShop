@@ -6,8 +6,8 @@
     "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
     "rating": 5,
     "date": "October 18, 2026",
-    "title": "Super fast simulated delivery & great backpack!",
-    "comment": "Ordered the Fjallraven backpack using the demo balance and SMART10 discount code. The UI is exceptionally responsive and smooth. Love how seamless the checkout was!",
+    "title": "Super fast express delivery & great backpack!",
+    "comment": "Ordered the Fjallraven backpack using my wallet balance and the SMART10 discount code. The UI is exceptionally responsive and smooth. Love how seamless the checkout experience was!",
     "verifiedPurchase": true,
     "product": "Fjallraven - Foldsack No. 1 Backpack"
   },
@@ -18,8 +18,8 @@
     "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
     "rating": 5,
     "date": "October 20, 2026",
-    "title": "Stunning jewelry collection and clear BDT pricing",
-    "comment": "The Petite Micropave ring simulation looks fantastic. Having prices clearly converted into simulated BDT makes it feel just like a real e-commerce platform.",
+    "title": "Stunning jewelry collection and transparent BDT pricing",
+    "comment": "The Petite Micropave ring arrived in pristine condition. Having clear BDT pricing and itemized shipping makes shopping here reliable and straightforward.",
     "verifiedPurchase": true,
     "product": "Solid Gold Petite Micropave"
   },
@@ -30,8 +30,8 @@
     "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80",
     "rating": 4,
     "date": "October 22, 2026",
-    "title": "High quality SSD drive, tested live in cart",
-    "comment": "Tested the cart balance limit when adding the SanDisk 1TB SSD. The system prevented checkout when balance was low, and after clicking Add Money it processed smoothly!",
+    "title": "High quality SSD drive, tested right out of the box",
+    "comment": "Purchased the SanDisk 1TB SSD. Excellent transfer speeds, solid packaging, and the order tracking gave me peace of mind throughout the delivery.",
     "verifiedPurchase": true,
     "product": "SanDisk SSD PLUS 1TB Internal SSD"
   },
@@ -43,7 +43,7 @@
     "rating": 5,
     "date": "October 24, 2026",
     "title": "Clean styling and intuitive navigation",
-    "comment": "The promotional carousel and product filters make finding winter jackets effortless. The coupon code SMART10 gave an exact 10% subtotal discount right before checkout.",
+    "comment": "The category filters and search bar make finding winter apparel effortless. The promo code SMART10 gave an exact 10% subtotal discount right before checkout.",
     "verifiedPurchase": true,
     "product": "Mens Cotton Jacket"
   },
@@ -55,7 +55,7 @@
     "rating": 5,
     "date": "October 25, 2026",
     "title": "Impressive responsive layout and performance!",
-    "comment": "Purely vanilla JavaScript and Tailwind utilities. The localStorage persistence works flawlessly even when reopening or refreshing the browser tab.",
+    "comment": "The shopping experience is lightning fast. Everything updates instantly in the cart, and my orders persist reliably whenever I return to the site.",
     "verifiedPurchase": true,
     "product": "Acer SB220Q Ultra-Thin Monitor"
   },
@@ -66,8 +66,8 @@
     "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     "rating": 5,
     "date": "October 26, 2026",
-    "title": "Outstanding responsive layout on mobile and desktop",
-    "comment": "The sticky navigation, sliding cart drawer, and interactive carousel controls work flawlessly across screen sizes. Excellent execution of a modern single-page store.",
+    "title": "Outstanding experience on both mobile and desktop",
+    "comment": "The sticky navigation, sliding cart drawer, and interactive carousel controls work flawlessly across screen sizes. Excellent execution of a modern online store.",
     "verifiedPurchase": true,
     "product": "Lock and Love Women's Biker Jacket"
   }

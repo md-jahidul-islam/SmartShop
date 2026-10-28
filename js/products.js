@@ -13,7 +13,7 @@ const Products = {
   sortOrder: 'default',
   selectedProduct: null,
 
-  // Fallback offline mock dataset in case of network restriction or API downtime
+  // Backup catalog in case of external network downtime
   fallbackProducts: [
     {
       id: 1,
@@ -160,7 +160,7 @@ const Products = {
 
       const data = await response.json();
       if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('No products returned from API');
+        throw new Error('No products returned from catalog server');
       }
 
       this.products = data;
@@ -169,7 +169,7 @@ const Products = {
       this.applyFilterAndSort();
 
       if (window.App && typeof window.App.showToast === 'function') {
-        window.App.showToast(`Loaded ${data.length} products from FakeStore API`, 'info');
+        window.App.showToast(`Loaded ${data.length} products across departments`, 'info');
       }
     } catch (err) {
       console.warn('FakeStore API fetch failed or timed out:', err);
@@ -190,13 +190,13 @@ const Products = {
     if (errorContainer) {
       errorContainer.classList.remove('hidden');
       if (errorText) {
-        errorText.textContent = `Unable to fetch from FakeStore API (${errorMsg}). You can retry or load the offline demo product catalog.`;
+        errorText.textContent = `Unable to retrieve real-time inventory (${errorMsg}). You can retry the connection or switch to our backup catalog.`;
       }
     }
   },
 
   /**
-   * Use fallback offline dataset
+   * Use fallback catalog dataset
    */
   loadFallbackProducts() {
     const errorContainer = document.getElementById('products-error-container');
@@ -208,7 +208,7 @@ const Products = {
     this.applyFilterAndSort();
 
     if (window.App && typeof window.App.showToast === 'function') {
-      window.App.showToast('Loaded offline demo product catalog successfully!', 'success');
+      window.App.showToast('Loaded backup product catalog successfully.', 'success');
     }
   },
 
@@ -218,6 +218,15 @@ const Products = {
   extractCategories() {
     const catSet = new Set(this.products.map(p => p.category));
     this.categories = ['all', ...Array.from(catSet)];
+
+    // Populate header category select if present
+    const headerCatSelect = document.getElementById('header-category-select');
+    if (headerCatSelect) {
+      headerCatSelect.innerHTML = this.categories.map(cat => {
+        const label = cat === 'all' ? 'All Departments' : cat.charAt(0).toUpperCase() + cat.slice(1);
+        return `<option value="${cat}">${label}</option>`;
+      }).join('');
+    }
   },
 
   /**
@@ -228,14 +237,14 @@ const Products = {
     if (!container) return;
 
     const formatCategoryName = (cat) => {
-      if (cat === 'all') return 'All Categories';
+      if (cat === 'all') return 'All Departments';
       return cat.charAt(0).toUpperCase() + cat.slice(1);
     };
 
     container.innerHTML = this.categories.map(cat => {
       const isActive = this.activeCategory.toLowerCase() === cat.toLowerCase();
-      const activeClasses = 'bg-indigo-600 text-white shadow-sm shadow-indigo-200 border-indigo-600';
-      const inactiveClasses = 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300';
+      const activeClasses = 'bg-slate-900 text-white shadow-sm border-slate-900';
+      const inactiveClasses = 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300';
 
       return `
         <button 
@@ -286,7 +295,7 @@ const Products = {
         break;
       case 'default':
       default:
-        // maintain original fetched order
+        // maintain original catalog order
         break;
     }
 
@@ -299,6 +308,11 @@ const Products = {
    */
   setCategory(cat) {
     this.activeCategory = cat;
+    
+    // Sync header dropdown if available
+    const headerCatSelect = document.getElementById('header-category-select');
+    if (headerCatSelect) headerCatSelect.value = cat;
+
     this.renderCategoryFilters();
     this.applyFilterAndSort();
   },
@@ -309,6 +323,18 @@ const Products = {
    */
   setSearch(query) {
     this.searchQuery = query;
+
+    // Sync input fields
+    const productSearchInput = document.getElementById('product-search-input');
+    const headerSearchInput = document.getElementById('header-search-input');
+
+    if (productSearchInput && productSearchInput.value !== query) {
+      productSearchInput.value = query;
+    }
+    if (headerSearchInput && headerSearchInput.value !== query) {
+      headerSearchInput.value = query;
+    }
+
     this.applyFilterAndSort();
   },
 
@@ -332,6 +358,12 @@ const Products = {
     const searchInput = document.getElementById('product-search-input');
     if (searchInput) searchInput.value = '';
 
+    const headerSearchInput = document.getElementById('header-search-input');
+    if (headerSearchInput) headerSearchInput.value = '';
+
+    const headerCatSelect = document.getElementById('header-category-select');
+    if (headerCatSelect) headerCatSelect.value = 'all';
+
     const sortSelect = document.getElementById('product-sort-select');
     if (sortSelect) sortSelect.value = 'default';
 
@@ -350,7 +382,7 @@ const Products = {
     let skeletons = '';
     for (let i = 0; i < count; i++) {
       skeletons += `
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm animate-pulse flex flex-col h-full">
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm animate-pulse flex flex-col h-full">
           <div class="w-full h-48 bg-slate-200 rounded-xl mb-4"></div>
           <div class="h-4 bg-slate-200 rounded w-1/3 mb-2"></div>
           <div class="h-5 bg-slate-200 rounded w-5/6 mb-2"></div>
@@ -419,31 +451,25 @@ const Products = {
       const ratingRate = product.rating?.rate || 0;
       const ratingCount = product.rating?.count || 0;
       const starsHtml = this.generateStars(ratingRate);
+      const isTopRated = ratingRate >= 4.0;
 
       return `
-        <div class="group bg-white rounded-2xl p-4 border border-slate-200/80 hover:border-indigo-300 hover:shadow-xl hover:shadow-indigo-50/50 transition-all duration-300 flex flex-col h-full relative">
-          <!-- Category Badge -->
+        <div class="group bg-white rounded-2xl p-4 border border-slate-200 hover:border-slate-300 hover:shadow-xl transition-all duration-300 flex flex-col h-full relative">
+          <!-- Card Header Badges -->
           <div class="flex items-center justify-between mb-3">
-            <span class="inline-block text-[11px] font-semibold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100/80">
+            <span class="inline-block text-[11px] font-semibold uppercase tracking-wider text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
               ${product.category}
             </span>
-            <button 
-              type="button" 
-              class="text-xs text-slate-400 hover:text-indigo-600 transition-colors p-1"
-              onclick="Products.openQuickView(${product.id})"
-              title="Quick View"
-              aria-label="Quick View product"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </button>
+            ${isTopRated ? `
+              <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                ★ Popular
+              </span>
+            ` : ''}
           </div>
 
           <!-- Product Image Container -->
           <div 
-            class="relative w-full h-48 bg-slate-50/60 rounded-xl p-4 flex items-center justify-center overflow-hidden mb-4 cursor-pointer"
+            class="relative w-full h-48 bg-slate-50/80 rounded-xl p-4 flex items-center justify-center overflow-hidden mb-4 cursor-pointer"
             onclick="Products.openQuickView(${product.id})"
           >
             <img 
@@ -465,7 +491,7 @@ const Products = {
             </h3>
 
             <!-- Rating Stars -->
-            <div class="flex items-center gap-1.5 mb-3 mt-auto">
+            <div class="flex items-center gap-1.5 mb-2 mt-auto">
               <div class="flex items-center">
                 ${starsHtml}
               </div>
@@ -473,26 +499,49 @@ const Products = {
               <span class="text-xs text-slate-400">(${ratingCount})</span>
             </div>
 
-            <!-- Price and Action Button -->
+            <!-- Delivery Feature Note -->
+            <div class="mb-3">
+              <span class="text-[11px] font-medium text-emerald-600 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Express Delivery Eligible
+              </span>
+            </div>
+
+            <!-- Price and Action Buttons -->
             <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
               <div>
-                <div class="flex items-baseline gap-1">
-                  <span class="text-base font-extrabold text-slate-900">৳ ${priceFormatted}</span>
-                </div>
-                <span class="text-[10px] font-medium text-indigo-500 uppercase tracking-tight block">Simulated BDT</span>
+                <span class="text-base font-extrabold text-slate-900">৳ ${priceFormatted}</span>
+                <span class="text-[10px] font-medium text-slate-400 block">BDT • In Stock</span>
               </div>
 
-              <button 
-                type="button" 
-                class="inline-flex items-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm shadow-indigo-200 transition-colors active:scale-95"
-                onclick="Cart.addItem(Products.getProductById(${product.id}))"
-                aria-label="Add ${product.title} to cart"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span>Add</span>
-              </button>
+              <div class="flex items-center gap-1.5">
+                <button 
+                  type="button" 
+                  class="p-2 border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-xl transition-colors"
+                  onclick="Products.openQuickView(${product.id})"
+                  title="Quick View Details"
+                  aria-label="Quick View ${product.title}"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+
+                <button 
+                  type="button" 
+                  class="inline-flex items-center gap-1 px-3 py-2 bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-bold rounded-xl shadow-sm transition-all active:scale-95"
+                  onclick="Cart.addItem(Products.getProductById(${product.id}))"
+                  aria-label="Add ${product.title} to cart"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span>Add to Cart</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -572,10 +621,23 @@ const Products = {
   },
 
   /**
+   * Buy Now action from modal: adds product and proceeds directly to checkout
+   */
+  buyNowFromModal() {
+    if (!this.selectedProduct) return;
+    const qtyInput = document.getElementById('modal-product-qty');
+    const qty = qtyInput ? Math.max(1, parseInt(qtyInput.value) || 1) : 1;
+
+    Cart.addItem(this.selectedProduct, qty);
+    this.closeQuickView();
+    Cart.startCheckout();
+  },
+
+  /**
    * Bind event listeners for search, sort, and modal
    */
   bindEvents() {
-    // Search input handler with input event for live filtering
+    // Section Search input handler
     const searchInput = document.getElementById('product-search-input');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
@@ -588,6 +650,47 @@ const Products = {
             clearBtn.classList.add('hidden');
           }
         }
+      });
+    }
+
+    // Header global search bar
+    const headerSearchInput = document.getElementById('header-search-input');
+    const headerSearchBtn = document.getElementById('header-search-btn');
+    const headerCatSelect = document.getElementById('header-category-select');
+
+    if (headerSearchInput) {
+      headerSearchInput.addEventListener('input', (e) => {
+        this.setSearch(e.target.value);
+      });
+
+      headerSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.setSearch(headerSearchInput.value);
+          const productsSection = document.getElementById('products');
+          if (productsSection) {
+            productsSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    }
+
+    if (headerSearchBtn) {
+      headerSearchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (headerSearchInput) {
+          this.setSearch(headerSearchInput.value);
+        }
+        const productsSection = document.getElementById('products');
+        if (productsSection) {
+          productsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    if (headerCatSelect) {
+      headerCatSelect.addEventListener('change', (e) => {
+        this.setCategory(e.target.value);
       });
     }
 
@@ -623,7 +726,7 @@ const Products = {
       retryBtn.addEventListener('click', () => this.fetchProducts());
     }
 
-    // Offline demo fallback button in error state
+    // Backup catalog button in error state
     const fallbackBtn = document.getElementById('products-fallback-btn');
     if (fallbackBtn) {
       fallbackBtn.addEventListener('click', () => this.loadFallbackProducts());
@@ -645,6 +748,12 @@ const Products = {
     const modalAddToCartBtn = document.getElementById('modal-add-to-cart-btn');
     if (modalAddToCartBtn) {
       modalAddToCartBtn.addEventListener('click', () => this.addCurrentModalProductToCart());
+    }
+
+    // Modal Buy Now
+    const modalBuyNowBtn = document.getElementById('modal-buy-now-btn');
+    if (modalBuyNowBtn) {
+      modalBuyNowBtn.addEventListener('click', () => this.buyNowFromModal());
     }
 
     // Modal Qty buttons (+/-)
@@ -670,10 +779,16 @@ const Products = {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         this.closeQuickView();
+        if (window.Cart) {
+          window.Cart.closeCheckoutModal();
+          window.Cart.closeOrderHistoryModal();
+        }
+        if (window.App) {
+          window.App.closeOrderConfirmation();
+        }
       }
     });
   }
 };
 
-// Expose Products to global window object
 window.Products = Products;

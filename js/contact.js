@@ -1,5 +1,5 @@
 /**
- * SmartShop - CSE-3532 Mid-Project
+ * SmartShop
  * Contact Form Validation & Submission
  * Strictly Vanilla JavaScript DOM & Tailwind Utility Classes
  */
@@ -71,7 +71,7 @@ const Contact = {
           message = 'Please enter your email address.';
         } else if (!emailRegex.test(val)) {
           isValid = false;
-          message = 'Please enter a valid email address (e.g., student@university.edu).';
+          message = 'Please enter a valid email address (e.g., name@example.com).';
         }
         break;
 

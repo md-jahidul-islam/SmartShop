@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartShop | CSE-3532 Mid-Project</title>
+  <title>SmartShop - Responsive E-Commerce Demo</title>
   
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -29,13 +29,13 @@
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
   <!-- ==========================================
-       TOP NOTIFICATION BANNER (COURSE & SIMULATION NOTICE)
+       TOP NOTIFICATION BANNER (SIMULATION NOTICE)
        ========================================== -->
   <div class="bg-indigo-900 text-indigo-100 text-xs py-2 px-4 border-b border-indigo-800">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <span class="inline-block bg-indigo-500/30 text-indigo-200 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border border-indigo-400/30">
-          CSE-3532 Mid-Project
+          SmartShop Demo
         </span>
         <span class="font-medium text-xs">Simulated BDT (৳) Pricing & Demo Balance System • No Real Payment Processing</span>
       </div>
@@ -53,7 +53,7 @@
   </div>
 
   <!-- ==========================================
-       RESPONSIVE STICKY NAVBAR
+       RESPONSIVE STICKY NAVBAR WITH ACTIVE HIGHLIGHTING
        ========================================== -->
   <header id="main-navbar" class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,17 +68,17 @@
           </div>
           <div>
             <span class="text-2xl font-black tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">Smart<span class="text-indigo-600">Shop</span></span>
-            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest -mt-1">CSE-3532 Demo Store</span>
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest -mt-1">Online Store</span>
           </div>
         </a>
 
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden md:flex items-center gap-8">
-          <a href="#home" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Home</a>
-          <a href="#products" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Products</a>
-          <a href="#reviews" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Reviews</a>
-          <a href="#about" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">About</a>
-          <a href="#contact" class="text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors py-2">Contact</a>
+        <!-- Desktop Navigation Links (with Active Section Highlighting) -->
+        <nav class="hidden md:flex items-center gap-2 lg:gap-3">
+          <a href="#home" class="desktop-nav-link text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors px-3 py-1.5 rounded-lg">Home</a>
+          <a href="#products" class="desktop-nav-link text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors px-3 py-1.5 rounded-lg">Products</a>
+          <a href="#reviews" class="desktop-nav-link text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors px-3 py-1.5 rounded-lg">Reviews</a>
+          <a href="#about" class="desktop-nav-link text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors px-3 py-1.5 rounded-lg">About</a>
+          <a href="#contact" class="desktop-nav-link text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors px-3 py-1.5 rounded-lg">Contact</a>
         </nav>
 
         <!-- Right Action Items: Demo Balance & Cart Drawer Trigger -->
@@ -137,11 +137,11 @@
     <!-- Mobile Menu Dropdown -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl space-y-3">
       <div class="flex flex-col space-y-2">
-        <a href="#home" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Home</a>
-        <a href="#products" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Products</a>
-        <a href="#reviews" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Reviews</a>
-        <a href="#about" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">About</a>
-        <a href="#contact" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100">Contact</a>
+        <a href="#home" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100 rounded-md transition-colors">Home</a>
+        <a href="#products" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100 rounded-md transition-colors">Products</a>
+        <a href="#reviews" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100 rounded-md transition-colors">Reviews</a>
+        <a href="#about" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100 rounded-md transition-colors">About</a>
+        <a href="#contact" class="mobile-nav-link text-sm font-semibold text-slate-800 hover:text-indigo-600 py-2 border-b border-slate-100 rounded-md transition-colors">Contact</a>
       </div>
 
       <!-- Mobile Balance & Add Money -->
@@ -162,10 +162,10 @@
   </header>
 
   <!-- ==========================================
-       HERO: 4-SLIDE PROMOTIONAL IMAGE CAROUSEL
+       HERO: 4-IMAGE PROMOTIONAL SLIDER
        ========================================== -->
   <section id="home" class="relative bg-slate-900 overflow-hidden">
-    <!-- Carousel Frame (Height adjusted for responsiveness) -->
+    <!-- Carousel Frame -->
     <div id="promo-carousel" class="relative w-full h-[460px] sm:h-[520px] md:h-[580px] lg:h-[620px] overflow-hidden select-none">
       
       <!-- Slide Containers will be dynamically rendered here -->
@@ -217,8 +217,8 @@
             </svg>
           </div>
           <div>
-            <h4 class="text-sm font-bold text-slate-900">Simulated Fast Delivery</h4>
-            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Free standard delivery nationwide on simulated orders over ৳ 500.</p>
+            <h4 class="text-sm font-bold text-slate-900">Simulated Delivery</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Free standard shipping on all simulated demo orders over ৳ 500.</p>
           </div>
         </div>
 
@@ -256,8 +256,8 @@
             </svg>
           </div>
           <div>
-            <h4 class="text-sm font-bold text-slate-900">Verified REST API</h4>
-            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Real-time products fetched dynamically from FakeStore API.</p>
+            <h4 class="text-sm font-bold text-slate-900">Live Catalog API</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Dynamic items fetched directly from FakeStore REST API.</p>
           </div>
         </div>
 
@@ -348,7 +348,7 @@
 
       </div>
 
-      <!-- Category Filter Pills (Scrollable horizontally on mobile) -->
+      <!-- Category Filter Pills -->
       <div class="pt-3 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1" id="category-filters">
         <!-- Rendered by js/products.js -->
       </div>
@@ -489,7 +489,7 @@
   </section>
 
   <!-- ==========================================
-       ABOUT & GROUP SHOWCASE SECTION
+       ABOUT SECTION
        ========================================== -->
   <section id="about" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -499,15 +499,13 @@
         <!-- Left: Project Narrative -->
         <div class="lg:col-span-6 space-y-6">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider">
-            Academic Project Overview
+            About SmartShop
           </div>
           <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-            Built for CSE-3532: Web Technologies Mid-Term
+            Modern, Responsive E-Commerce Architecture
           </h2>
           <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-            SmartShop is an educational single-page e-commerce application created to demonstrate mastery of core modern web fundamentals.
-            Built purely with <strong>HTML5</strong>, <strong>Tailwind CSS utility classes</strong>, and <strong>Vanilla JavaScript DOM</strong>,
-            with absolutely zero reliance on React, Vue, Bootstrap, or custom CSS stylesheets.
+            SmartShop is a complete single-page e-commerce demonstration designed to showcase clean web development using only <strong>HTML5</strong>, <strong>Tailwind CSS utility classes</strong>, and <strong>Vanilla JavaScript DOM</strong> manipulation, with zero third-party UI framework dependencies.
           </p>
 
           <!-- Core Feature Bullets -->
@@ -561,87 +559,51 @@
           </div>
         </div>
 
-        <!-- Right: Team Members Card -->
+        <!-- Right: System Specifications Dashboard Card -->
         <div class="lg:col-span-6">
           <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-800">
             <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
               <div>
-                <h3 class="text-lg font-bold text-white">Project Development Team</h3>
-                <span class="text-xs text-indigo-400 font-medium">CSE-3532: Web Technologies Mid-Project</span>
+                <h3 class="text-lg font-bold text-white">Platform Specifications</h3>
+                <span class="text-xs text-indigo-400 font-medium">SmartShop Core Capabilities</span>
               </div>
-              <span class="px-2.5 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold rounded-full uppercase">
-                Team Evaluation
+              <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold rounded-full uppercase">
+                Zero Frameworks
               </span>
             </div>
 
-            <!-- Members List Table -->
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
-                <thead>
-                  <tr class="text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider">
-                    <th class="pb-3 font-semibold">Student Name</th>
-                    <th class="pb-3 font-semibold">Student ID</th>
-                    <th class="pb-3 font-semibold">Project Role</th>
-                    <th class="pb-3 font-semibold text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-800/80">
-                  <!-- Group Member 1 -->
-                  <tr>
-                    <td class="py-3 font-medium text-white">
-                      [Member 1 Name]
-                      <span class="block text-[10px] text-slate-400">Lead Frontend Developer</span>
-                    </td>
-                    <td class="py-3 text-slate-300 font-mono">[2023-XX-001]</td>
-                    <td class="py-3 text-slate-300">HTML5 Structure & Tailwind</td>
-                    <td class="py-3 text-right">
-                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
-                    </td>
-                  </tr>
-                  <!-- Group Member 2 -->
-                  <tr>
-                    <td class="py-3 font-medium text-white">
-                      [Member 2 Name]
-                      <span class="block text-[10px] text-slate-400">Cart & State Architect</span>
-                    </td>
-                    <td class="py-3 text-slate-300 font-mono">[2023-XX-002]</td>
-                    <td class="py-3 text-slate-300">Cart, Balance & LocalStorage</td>
-                    <td class="py-3 text-right">
-                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
-                    </td>
-                  </tr>
-                  <!-- Group Member 3 -->
-                  <tr>
-                    <td class="py-3 font-medium text-white">
-                      [Member 3 Name]
-                      <span class="block text-[10px] text-slate-400">API & Carousels Engineer</span>
-                    </td>
-                    <td class="py-3 text-slate-300 font-mono">[2023-XX-003]</td>
-                    <td class="py-3 text-slate-300">FakeStore API & reviews.json</td>
-                    <td class="py-3 text-right">
-                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
-                    </td>
-                  </tr>
-                  <!-- Group Member 4 -->
-                  <tr>
-                    <td class="py-3 font-medium text-white">
-                      [Member 4 Name]
-                      <span class="block text-[10px] text-slate-400">QA & Validation Lead</span>
-                    </td>
-                    <td class="py-3 text-slate-300 font-mono">[2023-XX-004]</td>
-                    <td class="py-3 text-slate-300">Contact Validation & Testing</td>
-                    <td class="py-3 text-right">
-                      <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Active</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <!-- Features Breakdown List -->
+            <div class="space-y-3.5 text-xs">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-800">
+                <span class="text-slate-300 font-medium">Markup & Layout</span>
+                <span class="text-indigo-300 font-semibold">HTML5 + Tailwind CSS CDN</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-800">
+                <span class="text-slate-300 font-medium">Scripting Engine</span>
+                <span class="text-indigo-300 font-semibold">Vanilla JavaScript DOM</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-800">
+                <span class="text-slate-300 font-medium">Product Catalog</span>
+                <span class="text-indigo-300 font-semibold">FakeStore REST API Service</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-800">
+                <span class="text-slate-300 font-medium">Customer Reviews</span>
+                <span class="text-indigo-300 font-semibold">data/reviews.json Stream</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-800">
+                <span class="text-slate-300 font-medium">State Persistence</span>
+                <span class="text-indigo-300 font-semibold">Browser LocalStorage API</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-800">
+                <span class="text-slate-300 font-medium">Currency & Wallet</span>
+                <span class="text-indigo-300 font-semibold">Simulated BDT (৳) Demo</span>
+              </div>
             </div>
 
             <!-- Notes in Card Footer -->
             <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
-              <span>Submitted for Mid-Project Assessment</span>
-              <span class="text-indigo-400 font-semibold">Semester: Fall 2026</span>
+              <span>Fully Responsive Layout</span>
+              <span class="text-emerald-400 font-semibold">Production Ready Demo</span>
             </div>
           </div>
         </div>
@@ -663,9 +625,9 @@
           <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
           Get in Touch
         </span>
-        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Contact Project Support</h2>
+        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Contact SmartShop Support</h2>
         <p class="text-sm text-slate-600 mt-2">
-          Have questions or feedback regarding our CSE-3532 mid-project? Send us a message using the validated form below.
+          Have questions or feedback regarding SmartShop? Send us a message using the validated form below.
         </p>
       </div>
 
@@ -698,7 +660,7 @@
               <input 
                 type="text" 
                 id="contact-name" 
-                placeholder="e.g. Mahfuzur Rahman"
+                placeholder="e.g. John Doe"
                 class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
               />
               <p id="contact-name-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
@@ -712,7 +674,7 @@
               <input 
                 type="email" 
                 id="contact-email" 
-                placeholder="e.g. student@department.edu.bd"
+                placeholder="e.g. customer@example.com"
                 class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
               />
               <p id="contact-email-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
@@ -740,7 +702,7 @@
               <textarea 
                 id="contact-message" 
                 rows="4" 
-                placeholder="Please describe your message or project question in detail (minimum 10 characters)..."
+                placeholder="Please describe your message or inquiry in detail (minimum 10 characters)..."
                 class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all resize-y"
               ></textarea>
               <p id="contact-message-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium"></p>
@@ -761,11 +723,11 @@
 
         </div>
 
-        <!-- Right: Information & Academic Contact Details -->
+        <!-- Right: Information & Customer Support Details -->
         <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
           
           <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Course & Lab Info</h3>
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Customer Support</h3>
             
             <div class="flex items-start gap-3">
               <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
@@ -774,8 +736,8 @@
                 </svg>
               </div>
               <div>
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Campus Location</span>
-                <p class="text-xs text-slate-700 mt-0.5">Department of Computer Science & Engineering, Academic Building 2, Dhaka, Bangladesh</p>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Service Center</span>
+                <p class="text-xs text-slate-700 mt-0.5">SmartShop Digital Commerce Operations</p>
               </div>
             </div>
 
@@ -786,8 +748,8 @@
                 </svg>
               </div>
               <div>
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Project Email</span>
-                <p class="text-xs text-slate-700 mt-0.5 font-medium">smartshop.cse3532@gmail.com</p>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Support Email</span>
+                <p class="text-xs text-slate-700 mt-0.5 font-medium">support@smartshop.demo</p>
               </div>
             </div>
 
@@ -798,8 +760,8 @@
                 </svg>
               </div>
               <div>
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Consultation Hours</span>
-                <p class="text-xs text-slate-700 mt-0.5">Sunday - Thursday: 10:00 AM - 4:30 PM (Lab 402)</p>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Operating Hours</span>
+                <p class="text-xs text-slate-700 mt-0.5">Monday - Friday: 9:00 AM - 6:00 PM</p>
               </div>
             </div>
           </div>
@@ -841,7 +803,7 @@
   <footer class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
         
         <!-- Brand Info -->
         <div class="lg:col-span-2 space-y-4">
@@ -854,10 +816,10 @@
             <span class="text-xl font-black text-white">Smart<span class="text-indigo-400">Shop</span></span>
           </div>
           <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
-            SmartShop is an academic e-commerce mid-project built strictly according to CSE-3532 specifications using only HTML5, Tailwind CSS utility classes, and Vanilla JavaScript DOM manipulation.
+            SmartShop is a complete, responsive e-commerce demo website built strictly using HTML5, Tailwind CSS utility classes, and Vanilla JavaScript DOM manipulation.
           </p>
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-[11px] text-amber-300">
-            <span>⚠️ Simulated BDT Economy — No real transactions</span>
+            <span>⚠️ Simulated BDT Economy — No real payment processing</span>
           </div>
         </div>
 
@@ -868,14 +830,14 @@
             <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
             <li><a href="#products" class="hover:text-white transition-colors">Product Catalog</a></li>
             <li><a href="#reviews" class="hover:text-white transition-colors">Customer Reviews</a></li>
-            <li><a href="#about" class="hover:text-white transition-colors">About Project</a></li>
+            <li><a href="#about" class="hover:text-white transition-colors">About SmartShop</a></li>
             <li><a href="#contact" class="hover:text-white transition-colors">Contact Support</a></li>
           </ul>
         </div>
 
         <!-- Tech Stack -->
         <div class="space-y-3">
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Tech Stack</h4>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Architecture</h4>
           <ul class="space-y-2 text-xs text-slate-400">
             <li>• Semantic HTML5 Markup</li>
             <li>• Tailwind CSS Utilities</li>
@@ -886,27 +848,13 @@
           </ul>
         </div>
 
-        <!-- Course Details -->
-        <div class="space-y-3">
-          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Academic Details</h4>
-          <div class="text-xs space-y-1.5">
-            <p class="text-white font-medium">CSE-3532: Web Technologies</p>
-            <p class="text-slate-400">Mid-Project Demonstration</p>
-            <p class="text-slate-400">Academic Term: Fall 2026</p>
-            <div class="pt-2">
-              <span class="text-[11px] text-indigo-400 font-semibold block">Team Members:</span>
-              <p class="text-[11px] text-slate-400">See About Section Table</p>
-            </div>
-          </div>
-        </div>
-
       </div>
 
       <!-- Footer Bottom -->
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <p>© 2026 SmartShop. CSE-3532 Mid-Project. All rights reserved.</p>
+        <p>© 2026 SmartShop. All rights reserved.</p>
         <p class="text-center sm:text-right">
-          Simulated BDT Currency & Wallet. Strictly for Educational & Evaluation Purposes.
+          Simulated BDT Currency & Wallet. Demo functionality only.
         </p>
       </div>
 
@@ -1050,20 +998,20 @@
         </div>
         
         <div id="cart-discount-row" class="hidden justify-between text-emerald-600 font-semibold">
-          <span>Discount (10% SMART10):</span>
+          <span>Coupon Discount (SMART10 10%):</span>
           <span id="cart-discount">-৳ 0.00</span>
         </div>
 
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-1.5">
-            <span>Shipping & Delivery:</span>
+            <span>Delivery & Shipping Fee:</span>
             <span id="cart-delivery-badge" class="hidden text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold">Free applied!</span>
           </div>
           <span id="cart-delivery" class="font-bold text-slate-900">৳ 60.00</span>
         </div>
 
         <div class="flex justify-between text-sm font-extrabold text-slate-900 pt-2 border-t border-slate-200">
-          <span>Payable Total:</span>
+          <span>Final Payable Amount:</span>
           <span id="cart-payable-total" class="text-indigo-600">৳ 0.00</span>
         </div>
       </div>
@@ -1232,15 +1180,15 @@
             <span id="receipt-subtotal" class="font-bold text-slate-800">৳ 0.00</span>
           </div>
           <div id="receipt-discount-row" class="hidden justify-between text-emerald-600 font-semibold">
-            <span>Discount (SMART10):</span>
+            <span>Coupon Discount (SMART10 10%):</span>
             <span id="receipt-discount">-৳ 0.00</span>
           </div>
           <div class="flex justify-between">
-            <span>Delivery Fee:</span>
+            <span>Delivery & Shipping Fee:</span>
             <span id="receipt-delivery" class="font-bold text-slate-800">FREE</span>
           </div>
           <div class="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-100">
-            <span>Total Deducted:</span>
+            <span>Final Payable Amount:</span>
             <span id="receipt-total" class="text-indigo-600">৳ 0.00</span>
           </div>
           <div class="flex justify-between text-xs font-semibold text-slate-700 pt-1">

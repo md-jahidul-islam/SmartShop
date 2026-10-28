@@ -1,6 +1,6 @@
 /**
- * SmartShop - CSE-3532 Mid-Project
- * Carousel Modules: 4-Slide Promotional Banner Carousel & Reviews Carousel
+ * SmartShop
+ * Carousel Modules: 4-Image Promotional Banner Carousel & Customer Reviews Carousel
  * Strictly Vanilla JavaScript DOM & Tailwind Utility Classes
  */
 
@@ -8,7 +8,7 @@ const PromoCarousel = {
   slides: [
     {
       id: 1,
-      badge: "CSE-3532 Featured Showcase",
+      badge: "Featured Electronics",
       title: "Next-Gen Tech & Accessories",
       subtitle: "Elevate your productivity with high-performance monitors, storage, and gadgets with simulated BDT pricing.",
       ctaText: "Shop Tech Collection",
@@ -38,7 +38,7 @@ const PromoCarousel = {
     },
     {
       id: 4,
-      badge: "Limited Time Student Offer",
+      badge: "Special Offer: 10% OFF",
       title: "Get 10% Discount with SMART10",
       subtitle: "Apply voucher code SMART10 at checkout and enjoy instant subtotal savings on all demo orders.",
       ctaText: "Claim 10% Voucher",
@@ -227,7 +227,7 @@ const PromoCarousel = {
 };
 
 /**
- * Reviews Carousel - Loads from data/reviews.json
+ * Reviews Carousel - Loads dynamically from data/reviews.json
  */
 const ReviewsCarousel = {
   DATA_URL: 'data/reviews.json',
@@ -246,7 +246,7 @@ const ReviewsCarousel = {
     if (!container) return;
 
     try {
-      // Relative path fetch compatible with VS Code Live Server
+      // Relative path fetch compatible with local dev servers
       const response = await fetch(this.DATA_URL);
       if (!response.ok) {
         throw new Error(`Failed to load reviews.json: ${response.status} ${response.statusText}`);
@@ -264,29 +264,29 @@ const ReviewsCarousel = {
       this.startAutoPlay();
     } catch (err) {
       console.warn('Reviews loading fallback:', err);
-      // Fallback local reviews if file fetch fails
+      // Fallback reviews if network restriction occurs
       this.reviews = [
         {
           id: 1,
-          name: "Tanvir Hasan",
-          role: "CSE Student",
+          name: "Verified Buyer",
+          role: "SmartShop Member",
           avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
           rating: 5,
           date: "October 18, 2026",
           title: "Super fast simulated delivery & great backpack!",
-          comment: "Ordered the Fjallraven backpack using my demo balance and SMART10 discount code. The UI is exceptionally responsive and smooth.",
+          comment: "Ordered the Fjallraven backpack using the demo balance and SMART10 discount code. The UI is exceptionally responsive and smooth.",
           verifiedPurchase: true,
           product: "Fjallraven - Foldsack No. 1 Backpack"
         },
         {
           id: 2,
-          name: "Nusrat Jahan",
-          role: "Software Engineering Major",
+          name: "Frequent Shopper",
+          role: "Verified Customer",
           avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
           rating: 5,
           date: "October 20, 2026",
           title: "Stunning jewelry collection and clear BDT pricing",
-          comment: "Having prices clearly labeled in simulated BDT makes it feel just like a real Bangladeshi e-commerce platform.",
+          comment: "Having prices clearly labeled in simulated BDT makes it feel just like a real e-commerce platform.",
           verifiedPurchase: true,
           product: "Solid Gold Petite Micropave"
         }

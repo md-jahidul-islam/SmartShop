@@ -1,5 +1,5 @@
 /**
- * SmartShop - CSE-3532 Mid-Project
+ * SmartShop
  * Application Orchestrator & Global Utilities
  * Strictly Vanilla JavaScript DOM & Tailwind Utility Classes
  */
@@ -12,6 +12,7 @@ const App = {
    */
   init() {
     this.setupStickyNavbar();
+    this.setupActiveNavHighlight();
     this.setupMobileMenu();
     this.setupBackToTop();
     this.setupSmoothScroll();
@@ -23,7 +24,7 @@ const App = {
     if (window.ReviewsCarousel) window.ReviewsCarousel.init();
     if (window.Contact) window.Contact.init();
 
-    console.log('%cSmartShop CSE-3532 Mid-Project Initialized Successfully!', 'color: #4f46e5; font-size: 14px; font-weight: bold;');
+    console.log('%cSmartShop Initialized Successfully!', 'color: #4f46e5; font-size: 14px; font-weight: bold;');
   },
 
   /**
@@ -42,6 +43,66 @@ const App = {
         navbar.classList.add('bg-white/80');
       }
     }, { passive: true });
+  },
+
+  /**
+   * Active Section Highlighting in Sticky Navbar
+   */
+  setupActiveNavHighlight() {
+    const sectionIds = ['home', 'products', 'reviews', 'about', 'contact'];
+    const desktopLinks = document.querySelectorAll('.desktop-nav-link');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+    const updateActiveSection = () => {
+      const scrollY = window.scrollY;
+      const navHeight = 90; // offset for sticky header
+
+      let currentSectionId = sectionIds[0];
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop - navHeight;
+          const height = el.offsetHeight;
+          if (scrollY >= top && scrollY < top + height) {
+            currentSectionId = id;
+            break;
+          }
+        }
+      }
+
+      // If scrolled to near the bottom, highlight the last section
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+        currentSectionId = 'contact';
+      }
+
+      // Update Desktop Links
+      desktopLinks.forEach(link => {
+        const href = link.getAttribute('href')?.replace('#', '');
+        if (href === currentSectionId) {
+          link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50/80');
+          link.classList.remove('text-slate-700', 'font-semibold');
+        } else {
+          link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50/80');
+          link.classList.add('text-slate-700', 'font-semibold');
+        }
+      });
+
+      // Update Mobile Links
+      mobileLinks.forEach(link => {
+        const href = link.getAttribute('href')?.replace('#', '');
+        if (href === currentSectionId) {
+          link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50', 'pl-3');
+          link.classList.remove('text-slate-800', 'font-semibold');
+        } else {
+          link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50', 'pl-3');
+          link.classList.add('text-slate-800', 'font-semibold');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    updateActiveSection();
   },
 
   /**

@@ -1,5 +1,5 @@
 /**
- * SmartShop - CSE-3532 Mid-Project
+ * SmartShop
  * Cart, Demo Balance, Coupon, and Checkout Management
  * Strictly Vanilla JavaScript DOM & LocalStorage
  */
@@ -254,7 +254,7 @@ const Cart = {
   },
 
   /**
-   * Calculate subtotal, discount, delivery fee, and payable total
+   * Calculate subtotal, delivery fee, shipping fee, discount, and final payable amount
    * @returns {Object}
    */
   getCalculations() {
@@ -266,22 +266,22 @@ const Cart = {
       discount = subtotal * (this.COUPON_DISCOUNT_PERCENT / 100);
     }
 
-    let delivery = 0;
+    let deliveryFee = 0;
     if (hasItems) {
       // Free delivery if subtotal after discount >= 500, else 60 BDT
-      delivery = (subtotal - discount) >= this.SHIPPING_THRESHOLD ? 0 : this.SHIPPING_FLAT_RATE;
+      deliveryFee = (subtotal - discount) >= this.SHIPPING_THRESHOLD ? 0 : this.SHIPPING_FLAT_RATE;
     }
 
-    const payableTotal = Math.max(0, subtotal - discount + delivery);
+    const payableTotal = Math.max(0, subtotal - discount + deliveryFee);
     const totalItemCount = this.items.reduce((count, item) => count + item.quantity, 0);
 
     return {
       subtotal: parseFloat(subtotal.toFixed(2)),
       discount: parseFloat(discount.toFixed(2)),
-      delivery: parseFloat(delivery.toFixed(2)),
+      delivery: parseFloat(deliveryFee.toFixed(2)),
       payableTotal: parseFloat(payableTotal.toFixed(2)),
       itemCount: totalItemCount,
-      isFreeShipping: hasItems && delivery === 0,
+      isFreeShipping: hasItems && deliveryFee === 0,
       balanceDifference: parseFloat((payableTotal - this.balance).toFixed(2))
     };
   },
@@ -299,7 +299,7 @@ const Cart = {
       return false;
     }
 
-    // Check if payable total exceeds demo balance
+    // Check if final payable amount exceeds demo balance
     if (calc.payableTotal > this.balance) {
       const shortage = (calc.payableTotal - this.balance).toLocaleString('en-US', { minimumFractionDigits: 2 });
       if (window.App && typeof window.App.showToast === 'function') {
@@ -343,7 +343,7 @@ const Cart = {
     // Close cart drawer
     this.closeCartDrawer();
 
-    // Show order confirmation modal
+    // Show order confirmation receipt modal
     if (window.App && typeof window.App.showOrderReceiptModal === 'function') {
       window.App.showOrderReceiptModal(orderSummary);
     }
@@ -630,5 +630,4 @@ const Cart = {
   }
 };
 
-// Expose Cart to global window object
 window.Cart = Cart;

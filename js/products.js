@@ -1,5 +1,5 @@
 /**
- * SmartShop - CSE-3532 Mid-Project
+ * SmartShop
  * Products Management: Fetching, Search, Category Filters, Price Sorting & Quick View Modal
  * Strictly Vanilla JavaScript DOM & Tailwind Utility Classes
  */
